@@ -1,0 +1,132 @@
+{%extends 'member/basic.html'%}
+{% load static%}
+{%block title%}V D A S {%endblock%}
+{%block design %}
+<style>
+tspan{
+    opacity: 0 !important;
+}
+</style>
+{%endblock%}
+{%block fluid%}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 my-2 d-flex justify-content-center">
+            <iframe width="95%" height="700" id="gmap_canvas" src="https://maps.google.com/maps?q=univeristy%20of%20gujrat%20%20jalal%20pur%20jatta%20road&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{%block body%}
+
+<div class="row d-flex justify-content-evenly my-5" >
+    <div class="col-12"><h1 class="text-center my-3">Vehicle Data Acquisition System</h1></div>
+    <div class="col-md-4 col-10">
+        <iframe width="430" height="235" style="overflow: hidden !important;border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1751503/charts/1?bgcolor=%2300000012&color=%23d62020&dynamic=true&results=60&title=Light+Intensity&type=line"></iframe>
+    </div>
+    <div class="col-md-4">
+        <iframe width="430" height="235" style="overflow: hidden !important;border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1751503/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Temperature&type=line"></iframe>
+    </div>
+    
+</div>
+
+    <div class="row d-flex justify-content-evenly my-5" >
+    <div class="col-md-4 col-10">
+        <iframe width="430" height="235" style="overflow: hidden !important;border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1751503/charts/4?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Carbon+monoxide&type=line"></iframe>
+    </div>
+    <div class="col-md-4">
+        <iframe width="430" height="235" style="overflow: hidden !important;border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1751503/charts/3?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Humidity&type=line"></iframe>
+    </div>
+   
+    
+</div>
+<!-- #canvas Js Chart -->
+<div class="row">
+    <div class="col-lg-6">
+        <canvas id="Bar-chart" class="my-5 "></canvas>
+    </div>
+</div>
+
+<!-- Script  -->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+<script>
+
+
+var alldata = JSON.parse("{{data|escapejs}}");
+    // for(var x in alldata){
+    //     // dataNode.innerHTML+=x+' : '+data[x]+'<br><br>';
+    //     console.log(x+ ":" +alldata[x]);
+    // }
+
+    var xValues = ["Temperature °C", "CO", "Voice dB", "Pressure Pa", "Light"];
+    // var temp='{{ temperature }}';
+    // var co = '{{ c }}';
+    // var voice = '{{ v }}';
+    // var pressure = '{{ p }}';
+    // var light = '{{ temperature }}';
+
+    var temp=alldata.t;
+    var co = alldata.c;
+    var voice =alldata.v;
+    var pressure = alldata.p;
+    var light = alldata.l;
+
+    // console.log('printingggggggggggggg');
+    // console.log(alldata.c);
+    // console.log(alldata.t);
+    // console.log(alldata.v);
+    // console.log(alldata.p);
+
+
+    var yValues = [temp, co, voice, pressure, light];
+    var barColors = ["red", "green","blue","orange","brown"];
+    
+    new Chart("Bar-chart", {
+      type: "bar",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues
+        }]
+      },
+    
+    options: {
+            legend: {display: false,
+         text: "irfan"}, 
+         title: {
+           display: true,
+           text: "Vehicle Data Acquisition System"
+         },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    // Change here
+                    barPercentage: 0.5
+                }]
+            }
+        }
+     
+    });
+
+    // HideThinkSpeakLAble
+var span  = document.querySelectorAll(tspan);
+console.log('tspannnnnnnnnnnnnnnnnn'+span);
+ </script>
+<!-- <script>
+    const myChart = new Chart(
+      document.getElementById('Bar-chart'),
+      config
+    );
+    console.log('2nd funnnnnnnnnnnnnnnnnnnnnnnnnnnnccccccc');
+
+  </script> -->
+{% endblock%}

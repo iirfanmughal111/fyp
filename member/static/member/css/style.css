@@ -1,0 +1,62 @@
+#profile-img {
+  max-height: 25px;
+  max-width: 25px;
+  border: 2px solid rgb(67, 65, 65);
+  border-radius: 50%;
+
+}
+.my-link{
+  text-decoration: none;
+  
+}
+.form-box {
+  background-color: #00000012;
+  border: 2px solid rgb(98, 55, 55);
+}
+
+::placeholder {
+  font-weight: bold;
+}
+
+#logo {
+  max-width: 8%;
+  height: auto;
+  border-radius: 5px;
+}
+
+tspan {
+  opacity: 0 !important;
+  display: none !important;
+}
+
+#Bar-chart {
+  width: 100%;
+  min-width: 200px;
+}
+
+#dashbord-head {
+  background-color: antiquewhite;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#dashbord-aside {
+  background-color: rgb(233, 240, 240);
+  border-bottom-left-radius: 10px;
+
+}
+
+#dashbord-body {
+  /* background-color: rgb(250, 250, 249); */
+  background-color: rgb(233, 240, 240);
+
+  border-bottom-left-radius: 10px;
+
+  border-bottom-right-radius: 10px;
+}
+
+
+.bg-div{
+background: rgb(34,193,195);
+background: linear-gradient(0deg, rgba(34,193,195,1) 32%, rgba(45,234,253,1) 65%);
+}

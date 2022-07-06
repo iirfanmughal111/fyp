@@ -1,0 +1,267 @@
+{%extends 'main/admin_basic.html' %}
+{%block title%} User Updation{%endblock%}
+<style>
+  .bg-div{
+background: rgb(34,193,195);
+background: linear-gradient(0deg, rgba(34,193,195,1) 32%, rgba(45,234,253,1) 65%);
+}
+</style>
+{%block body%}
+
+
+
+<div class="row mt-5">
+  <div class="col-12">
+
+
+    <ul class="nav justify-content-center">
+      <li class="nav-item">
+        <a class="nav-link active tab-link" aria-current="page" data-bs-toggle="tab" href="#general">General</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link  tab-link" data-bs-toggle="tab" href="#personal">Personal Informationn</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link  tab-link" data-bs-toggle="tab" href="#permissions">Permissions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link  tab-link" data-bs-toggle="tab" href="#acesses" tabindex="-1"
+          aria-disabled="true">Acesses</a>
+      </li>
+    </ul>
+
+    <!-- TabContent -->
+    <div class="tab-content">
+
+      <div class="tab-pane active " id="general">
+        {%load static%}
+
+        <div class="row">
+          <div class="col-12 py-5 mt-3 border border-dark border-2 d-flex align-items-center flex-column">
+            <h4 class="my-3">Welcome to<span class="fw-bold fs-2"> {{user.username}}'s </span>   acount panel</h4>
+            <p>Account Title: <span class="fw-bold">{{user.first_name}} {{user.last_name}}</span></p>
+            <p class="fw-bold ms-5" style="text-decoration:underline;">Account ownwer detials</p>
+            <p>Account owner frist name: <span class="fw-bold">{{user.first_name}}</span></p>
+            <p>Account owner last name: <span class="fw-bold">{{user.last_name}}</span></p>
+            <p>Account owner Email: <span class="fw-bold">{{user.email}}</span></p>
+
+            <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
+              class="img-fluid m-5 rounded-circle" alt="uog-img">
+          </div>
+        </div>
+
+
+
+        <h1>general layout tab</h1>
+
+      </div>
+
+      <div class="tab-pane " id="personal">
+        <div class="row">
+          <div class="col-md-8">
+            <form method="post">
+              {% csrf_token %}
+              <label for="username" class="form-label my-2"> Username:</label>
+              <input type="text" value="{{user.username}}" class="form-control" name="username">
+
+              <div class="mb-3">
+                <label for="password" class="form-label my-2"> password:</label>
+                <input type="password" value="{{user.password}}" class="form-control " name="password" disabled>
+                <div id="passwordText" class="form-text">Raw passwords are not stored, so there is no way to see this
+                  user’s <br> password, but you can change the password using <a class="my-link fw-bold" href="../member/change_password"> this
+                    form</a></a></div>
+              </div>
+
+              <label for="first_name" class="form-label my-2"> First Name: </label>
+              <input type="text" value="{{user.first_name}}" class="form-control" name="first_name">
+
+              <label for="last_name" class="form-label my-2"> Last Name:</label>
+              <input type="text" value="{{user.last_name}}" class="form-control" name="last_name">
+
+              <label for="email" class="form-label my-2"> Emal</label>
+              <input type="text" value="{{user.email}}" class="form-control" name="email">
+
+              <div class="row border-bottom ">
+                <div class="col-12 d-flex my-3 justify-content-end"><button type="submit" class="btn btn-lg btn-outline-primary">submit</button></div>
+              </div>
+
+
+            </form>
+          </div>
+          <div class="col-md-4 d-flex justify-content-center align-items-center flex-column">
+            <div class="row border rounded mb-5">
+              <div class="col-12 bg-secondary rounded pt-2">
+                <p class="text-center text-white">Last Login date & Time :</p>
+              </div>
+               <div class="col-12">
+              <h6 class="text-center py-4"> {{user.last_login}}</h6>
+            </div>
+            </div>
+            <div class="row border rounded">
+              <div class="col-12 bg-secondary rounded pt-2">
+                <p class="text-center text-white">User Joined date & Time :</p>
+              </div>
+               <div class="col-12">
+              <h6 class="text-center py-4"> {{user.date_joined}}</h6>
+            </div>
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tab-pane " id="permissions">
+
+        <div class="row border mt-5">
+          <div class="col-6 ">
+            <h5 class="text-center">Permission title</h5>
+          </div>
+          <div class="col-3 ">
+            <h5 class="text-center">Update Permissions</h5>
+          </div>
+          <div class="col-3 ">
+            <h5 class="text-center">Current Permission</h5>
+          </div>
+
+
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          <div class="row my-3">
+            <div class="col-6">
+              <h6 class="text-center">Staff status</h6>
+              <input type="hidden" value="{{user.username}}" class="form-control" name="username">
+              <input type="hidden" value="{{user.last_name}}" class="form-control" name="last_name">
+              <input type="hidden" value="{{user.email}}" class="form-control" name="email">
+              <input type="hidden" value="{{user.first_name}}" class="form-control" name="first_name">
+
+
+
+
+
+            </div>
+            <div class="col-3 d-flex justify-content-center">
+
+              <input type="checkbox" class="form-check-input" name="is_staff" id="is_staff">
+
+
+            </div>
+            <div class="col-3">
+              {%if user.is_staff%}
+              <p class="text-center"><i class="fa-solid  text-primary fa-circle-check"></i></p>
+              {%else%}
+              <p class="text-center"><i class="fa-solid  text-danger fa-circle-xmark"></i></p>
+              {%endif%}
+            </div>
+          </div>
+
+
+          <div class="row my-3">
+            <div class="col-6">
+              <h6 class="text-center">active status</h6>
+
+
+            </div>
+            <div class="col-3 d-flex justify-content-center">
+
+              <input type="checkbox" class="form-check-input" name="is_active" id="is_active">
+
+
+            </div>
+            <div class="col-3">
+              {%if user.is_active%}
+              <p class="text-center"><i class="fa-solid  text-primary fa-circle-check"></i></p>
+              {%else%}
+              <p class="text-center"><i class="fa-solid  text-danger fa-circle-xmark"></i></p>
+              {%endif%}
+            </div>
+          </div>
+
+          <div class="row my-3">
+
+            <div class="col-6">
+              <h6 class="text-center">Super User status</h6>
+            </div>
+
+            <div class="col-3 d-flex justify-content-center">
+
+              <input type="checkbox" class="form-check-input" name="is_superuser" id="is_superuser">
+
+
+            </div>
+            <div class="col-3">
+              {%if user.is_superuser%}
+              <p class="text-center"><i class="fa-solid  text-primary fa-circle-check"></i></p>
+              {%else%}
+              <p class="text-center"><i class="fa-solid  text-danger fa-circle-xmark"></i></p>
+              {%endif%}
+            </div>
+          </div>
+
+
+
+
+          <div class="row border-bottom ">
+            <div class="col-12 d-flex mb-3 justify-content-end"><button type="submit" class="btn btn-lg btn-outline-primary">submit</button></div>
+          </div>
+
+
+        </form>
+
+        <div class="row mt-5" style="opacity: 0.7;">
+          <div class="col-12">
+            <h6>Staff Status</h6>
+            <p>Designates whether the user can log into this admin site.</p>
+          </div>
+          <div class="col-12">
+            <h6>Active Status</h6>
+            <p>Designates whether this user should be treated as active. Unselect this instead of deleting accounts.</p>
+          </div>
+          <div class="col-12">
+            <h6>SuperUser Status</h6>
+            <p>Designates that this user has all permissions without explicitly assigning them.</p>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="tab-pane " id="acesses">
+        Acesses tab
+
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<div class="row my-5">
+  <div class="col-12 ">
+    <!-- <form method="post">
+            {% csrf_token %}
+            <label for="username" class="form-label my-2"> Username:</label>
+            <input type="text" value="{{user.username}}" class="form-control" name="username">
+            <label for="first_name" class="form-label my-2"> First Name: </label>
+
+            <input type="text" value="{{user.first_name}}" class="form-control" name="first_name">
+            <label for="last_name" class="form-label my-2"> Last Name:</label>
+
+            <input type="text" value="{{user.last_name}}" class="form-control" name="last_name">
+            <label for="email" class="form-label my-2"> Emal</label>
+
+            <input type="text" value="{{user.email}}" class="form-control" name="email">
+            <label for="Password" class="form-label my-2"> Password:</label>
+
+            <input type="text" value="{{user.password}}" class="form-control" name="password">
+
+            <button type="submit">submit</button>
+
+
+        </form> -->
+  </div>
+</div>
+{%endblock%}

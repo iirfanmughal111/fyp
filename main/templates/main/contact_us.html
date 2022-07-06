@@ -1,0 +1,36 @@
+{%extends 'member/basic.html' %}
+{% block title%} Contact us{%endblock%}
+
+{% block body%}
+<div class="row d-flex my-5 justify-content-center">
+    <div class="col-lg-8 col-10 p-5 rounded shadow form-box">
+        <form action="contact_us" method="post">
+      <h1 class="mb-5 text-center">Contac Us</h1>
+
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="name"  class="form-label">Name</label>
+              <input type="text"  name="name" class="form-control" id="name" aria-describedby="emailHelp">
+              <div id="emailHelp" class="form-text">We'll never share your name with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="email"  class="form-label">email</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              </div>
+              <div class="mb-3">
+                <label for="Phone"  class="form-label">Phone</label>
+                <input type="Phone" class="form-control" id="Phone" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your contact number with anyone else.</div>
+              </div>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Leave a comment here" name="desc" id="desc" style="height: 100px"></textarea>
+                <label for="floatingTextarea2">Comments</label>
+              </div>
+            <button type="submit"  id="btn-form"class="btn btn-outline-primary my-3">Submit</button>
+          </form>
+    </div>
+</div>
+</div>
+
+{%endblock%}

@@ -1,0 +1,36 @@
+{% extends 'main/admin_basic.html' %}
+{% block title%}Add new user{% endblock%}
+{% block body%}
+<div class="row d-flex my-5 justify-content-center">
+    <div class="col-lg-8 col-10 p-5 rounded shadow ">
+
+       
+        <h1 class="mb-5 text-center">Add new User</h1>
+        {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+
+{% endif %}
+
+
+        <form method="POST" action="add_new_user">
+            {{form.as_p}}
+            {% csrf_token %}
+            <br>
+            <button type="submit" class="btn btn-outline-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

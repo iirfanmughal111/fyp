@@ -1,0 +1,65 @@
+{% extends 'member/basic.html' %}
+{%block title%}Dashbord {%endblock%}
+
+
+{%block body%}
+
+<div class="row p-3 mt-5" id="dashbord-head">
+    <div class="col-10 ">
+        <h2>Vehcile Data Acquisition System <span class="bold text-secondary ">Dashbord</span></h2>
+    </div>
+</div>
+
+<div class="row" id="dashbord-body">
+    <div class="col-4 mt-5" id="dashbord-aside">
+        <nav class="nav flex-column ">
+            <a class="nav-link my-link fw-bold  tab-link" data-bs-toggle="tab" href="#about_user">About Me</a>
+            <a class="nav-link my-link fw-bold tab-link" data-bs-toggle="tab" href="#change_password">Change
+                Password</a>
+            <a class="nav-link my-link fw-bold tab-link" data-bs-toggle="tab" href="#logout">Logout</a>
+
+        </nav>
+    </div>
+    <div class="col-6">
+
+        <!-- TabContent -->
+        <div class="tab-content">
+            <div class="tab-pane active" id="#">
+                {%load static%}
+                <img src="{% static 'member/images/uog.jpg' %}" class="img-fluid m-5 rounded-circle" alt="uog-img">
+            </div>
+            <div class="tab-pane" id="about_user">
+                <h4 class="my-3"><span class="fw-bold fs-2">{{user.username}} </span> Welcome to your acount panel</h4>
+                <p>Account Title: <span class="fw-bold">{{user.first_name}} {{user.last_name}}</span></p>
+                <p class="fw-bold ms-5" style="text-decoration:underline;">Account ownwer detials</p>
+                <p>Account owner frist name: <span class="fw-bold">{{user.first_name}}</span></p>
+                <p>Account owner last name: <span class="fw-bold">{{user.last_name}}</span></p>               
+                <p>Account owner Email: <span class="fw-bold">{{user.email}}</span></p>
+
+                <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
+                    class="img-fluid m-5 rounded-circle" alt="uog-img">
+
+            </div>
+
+            <div class="tab-pane " id="change_password">
+
+                <h1 class="my-5 text-center">Change Password</h1>
+                <p class="my-5">if your Password compromised, you should change your password for any illegal acitvity.
+                    To change your password, simply click <a href="change_password" class="fw-bold my-link">here</a></p>
+
+                <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
+                    class="img-fluid m-5 rounded-circle" alt="uog-img">
+            </div>
+            <div class="tab-pane " id="logout">
+                <p class="my-5"> To logout your account click <a href="http://127.0.0.1:8000/member/logout_user"
+                        class="fw-bold my-link">here</a></p>
+                <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
+                    class="img-fluid m-5 rounded-circle" alt="uog-img">
+            </div>
+
+        </div>
+        <!-- End Tab Content -->
+
+    </div>
+</div>
+{%endblock%}

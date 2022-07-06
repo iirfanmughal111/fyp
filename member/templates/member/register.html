@@ -1,0 +1,49 @@
+{% extends 'member/basic.html' %}
+{% block title%}Registration{% endblock%}
+{% block body%}
+<div class="row d-flex my-5 justify-content-center">
+    <div class="col-lg-8 col-10 p-5 rounded shadow form-box">
+
+       
+        <h1 class="mb-5 text-center">Registration</h1>
+        {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+
+{% endif %}
+
+        <!-- {% if form.errors %}
+        <ul>
+            {% for error in form.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %} -->
+
+
+        <form method="POST" action="register_user">
+
+            {{form.as_p}}
+            {% csrf_token %}
+            <br>
+            <div class="mb-3">
+                <p class="text-end">Already have an account? login<a class="fw-bold" style="text-decoration: none;"
+                        href="login_user"> here</a></p>
+            </div>
+            <button type="submit" class="btn btn-outline-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
