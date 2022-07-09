@@ -60,3 +60,7 @@ tspan {
 background: rgb(34,193,195);
 background: linear-gradient(0deg, rgba(34,193,195,1) 32%, rgba(45,234,253,1) 65%);
 }
+
+.hide{
+  display: none !important;
+}

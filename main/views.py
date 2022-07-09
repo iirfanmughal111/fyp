@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm
 from django.urls import reverse_lazy
 from member.forms import RegisterUserForm
+from device.models import devices,sensors
 from django.http import HttpResponse
 import csv
 from django.contrib.auth.decorators import login_required
@@ -55,8 +56,8 @@ def main_admin(request):
             djl_name = form.cleaned_data['last_name']
             
             user = authenticate(username = djusername, password = djpassword, email = djemail, first_name = djf_name, last_name = djl_name )
-            
-        context = {'users':users,'form':form}
+        alldevices = devices.objects.all()    
+        context = {'users':users,'form':form,'devices':alldevices}
         return render (request,'main/main_admin.html',context)
     else:
         return render (request,'member/index.html')
