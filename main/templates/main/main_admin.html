@@ -12,7 +12,7 @@
             <a class="nav-link my-link fw-bold tab-link" data-bs-toggle="tab" href="#devices">Devices</a>
             <a class="nav-link my-link fw-bold tab-link" data-bs-toggle="tab" href="#sensors">Sensors</a>
             <a class="nav-link my-link fw-bold tab-link" data-bs-toggle="tab" href="#log">Log</a>
-            <a class="nav-link my-link fw-bold tab-link" data-bs-toggle="tab" href="#tickting">Ticketing</a>
+            <a class="nav-link my-link fw-bold tab-link" data-bs-toggle="tab" href="#ticketing">Ticketing</a>
         </nav>
 
     </div>
@@ -119,7 +119,8 @@
                                             {{form.as_p}}
                                             {% csrf_token %}
                                             <br>
-                                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+                                            <button type="submit" class="btn btn-primary"
+                                                data-bs-dismiss="modal">Submit</button>
                                         </form>
                                     </div>
                                 </div>
@@ -212,24 +213,65 @@
             <!-- Tickting Tab  -->
 
             <div class="tab-pane " id="ticketing">
-                #Ticketing/permissions
-                <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
-                    class="img-fluid m-5 rounded-circle" alt="uog-img">
+                <div class="row my-5">
+                    <div class="col-4">
+
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <select class="form-select" id="user_select">
+                                <option selected disabled>Chose user</option>
+                                {% for user in users%}
+                                {% if not user.is_superuser%}
+                                <option value="{{user.username}}"  >{{user.id}}   {{user.username}}</option>
+                               
+                                {%endif%}
+                                {%endfor%}
+
+                            </select>
+                            <p id="t_user">Selected user</p>
+                            <br>
+                        </div>
+                        <div class="col-4">
+                            <select class="form-select" id="device_select">
+                                <option selected disabled>Chose Devices</option>
+                                {% for user in users%}
+                                
+                                <option value="{{user.username}}">{{user.id}}   {{user.username}}</option>
+                                <hr class="dropdown-divider">
+                                
+                                
+                                {%endfor%}
+
+                            </select>
+                            <p id="t_device">Selected device</p>
+
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+                        </form>
+                    
+                </div>
             </div>
 
-            <!-- ticketing Tab End -->
 
 
+            </div>
+
+            <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
+                class="img-fluid m-5 rounded-circle" alt="uog-img">
         </div>
-        <!-- End Tab Content -->
+
+        <!-- ticketing Tab End -->
+
+
     </div>
+    <!-- End Tab Content -->
+</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
 <script>
 
-
+    // DeleteUserModal 
     var deleteModal = document.getElementById('btn_del_modal')
     deleteModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
@@ -244,6 +286,22 @@
         del_user_id.setAttribute("href", btn_link);
     });
 
+    // TicketingTabJs
+
+    // SelectUserJs
+    document.getElementById('user_select').addEventListener('change', () => {
+        var userselected = document.getElementById('user_select').value;
+        var allusers = [];
+
+        document.getElementById('t_user').innerText = 'Username: ' + userselected;
+        
+    });
+     // SelectDeviceJS
+     document.getElementById('device_select').addEventListener('change', () => {
+        var deviceSelected = document.getElementById('device_select').value; 
+        document.getElementById('t_device').innerText = 'Device: ' + deviceSelected;
+        
+    });
 
 </script>
 {% endblock %}

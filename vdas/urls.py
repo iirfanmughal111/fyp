@@ -29,6 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('member/',include('django.contrib.auth.urls')),
     path('member/',include('member.urls')),
+    path('device/',include('device.urls')),
     path('',include('main.urls')),
 
     # path('',views.index,name='home'),
