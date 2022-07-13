@@ -11,7 +11,7 @@
 {% block body%}
 
 
-
+<!-- MainWork -->
 <div class="row mt-5">
 
     <div class="col-lg-2">
@@ -26,11 +26,11 @@
     </div>
     <div class="col-lg-10">
         <!-- TabContent -->
-        <div class="tab-content">
+         <div class="tab-content">
             <div class="tab-pane active" id="#">
                 {%load static%}
                 <img src="{% static 'member/images/uog.jpg' %}" class="img-fluid m-5 rounded-circle" alt="uog-img">
-            </div>
+            </div> 
 
             <!-- Usesr Tab -->
             <div class="tab-pane mt-5" id="users">
@@ -51,7 +51,7 @@
 
                     </div>
                 </div>
-
+                <div class="row">
                 <div class="col-12">
                     <table class="table table-striped">
                         <thead>
@@ -88,6 +88,7 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
 
 
                 <!-- AddNewUserModal -->
@@ -193,9 +194,13 @@
                         <a href="#" class="btn my-3 me-5 btn-primary " role="button">Export Devices As CSV
                             <i class="fa-solid ms-1 fa-file-export"></i> </a>
 
-                        <button type="button" class="btn my-3 me-5 btn-primary" id="btn_add_device">
+                        <!-- <button type="button" class="btn my-3 me-5 btn-primary" id="btn_add_device">
                             Add new <i class="fa-solid fa-plus"></i>
-                        </button>
+                        </button> -->
+                        <button type="button" class="btn my-3 me-5 btn-primary" data-bs-toggle="modal"
+                             data-bs-target="#btn_add_user">
+                            Add new <i class="fa-solid fa-plus"></i>
+                    </button>
 
                     </div>
                 </div>
@@ -205,11 +210,18 @@
                         <div class="row d-flex justify-content-end">
                             <div class="col-auto"><button class="btn btn-outline-danger btn-close" id="device_cancel"></button></div>
                         </div>
-                        <form action="" method="POST">
+                        <!-- <form action="" method="POST">
+                            {% csrf_token %}
+                            {{deviceForm}}
+                            <button>save device</button>
+                        </form> -->
+                        <form action="" method="">
+                            {% csrf_token %}
                             <label for="" class="form-label"> Vehicle #</label>
-                            <input class="form-control" type="number" name="vehicle_no" id="">
+                            <input class="form-control" type="number" name="vehicle_no" >
                             <label for="" class="form-label"> Route Name</label>
                             <input class="form-control" type="text" name="route_name"><br>
+                            <h5>Including sensors:</h5>
                             <label for="" class="form-label">  Temperature</label>
                             <input class="form-check-input" type="checkbox" name="temperature">
                             <label for="" class="form-label"> Carbon Mono </label>
@@ -224,41 +236,10 @@
                             <input class="form-check-input" type="checkbox" name="longitude">
                             <label for="" class="form-label"> latitude</label>
                             <input class="form-check-input" type="checkbox" name="latitude"><br>
-                            <button class="btn btn-outline-primary" type="submit">Save</button>
+                            <button class="btn btn-outline-primary" id="btn_device_save" type="submit">Save</button>
                         </form>
                     </div>
                 </div>
-                <!-- <div class="row">
-                    <div class="col-2">
-                        <h6>Vehicle #</h6><input type="number" name="vehicle_no" id="">
-                    </div>
-                    <div class="col-2">
-                        <h6>Route Name</h6> <input type="text" name="route_name">
-                    </div>
-                    <div class="col-2">
-                        <h6>temperature</h6><input type="checkbox" name="temperature">
-                    </div>
-                    <div class="col-1">
-                        <h6>CO</h6><input type="checkbox" name="carbon_mono">
-                    </div>
-                    <div class="col-1">
-                        <h6>Humidity</h6><input type="checkbox" name="humidity">
-                    </div>
-                    <div class="col-1">
-                        <h6>Light</h6><input type="checkbox" name="light">
-                    </div>
-                    <div class="col-1">
-                        <h6>Noise</h6><input type="checkbox" name="noise">
-                    </div>
-                    <div class="col-1">
-                        <h6>Long</h6><input type="checkbox" name="longitude">
-                    </div>
-                    <div class="col-1">
-                        <h6>Lati</h6><input type="checkbox" name="latitude">
-                    </div>
-
-                </div> -->
-
 
 
                 <!-- AllDevicesList -->
@@ -301,6 +282,60 @@
                         </table>
                     </div>
                 </div>
+
+
+                <!-- AddNewdeviceModal -->
+                <div class="modal fade " id="btn_add_device" tabindex="-1" aria-labelledby="AdddeviceModal"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="AdddeviceModal">Add new device</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="row d-flex my-5 justify-content-center">
+                                    <div class="col-11 rounded shadow">
+                                        <h1 class="mb-5 text-center">Add new device</h1>
+                                        {% if form.errors %}
+                                        {% for field in form %}
+                                        {% for error in field.errors %}
+                                        <div class="alert alert-danger">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                        {% endfor %}
+                                        {% endfor %}
+
+                                        {% for error in form.non_field_errors %}
+                                        <div class="alert alert-danger">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                        {% endfor %}
+
+                                        {% endif %}
+
+
+                                        <form method="POST" action="">
+                                            {{deviceform}}
+                                            {% csrf_token %}
+                                            <br>
+                                            <button type="submit" class="btn btn-primary"
+                                                data-bs-dismiss="modal">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <p>device Fotter</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- EndNewDeviceModal -->
 
                 <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
                     class="img-fluid m-5 rounded-circle" alt="uog-img">
@@ -442,6 +477,56 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
+    <script>
+        var user_tab = document.getElementById('users1');
+        var dev_tab = document.getElementById('devices1');
+        var sen_tab = document.getElementById('sensors1');
+        var log_tab = document.getElementById('log1');
+        var ticket_tab = document.getElementById('ticketing1');
+
+        document.getElementById('user-tab').addEventListener('click',()=>{
+            user_tab.classList.remove('hide');
+            dev_tab.classList.add('hide');
+            sen_tab.classList.add('hide');
+            log_tab.classList.add('hide');
+            ticket_tab.classList.add('hide');
+
+        });
+        document.getElementById('devcies-tab').addEventListener('click',()=>{
+            user_tab.classList.add('hide');
+            dev_tab.classList.remove('hide');
+            sen_tab.classList.add('hide');
+            log_tab.classList.add('hide');
+            ticket_tab.classList.add('hide');
+            
+
+        });
+        document.getElementById('sensors-tab').addEventListener('click',()=>{
+            user_tab.classList.add('hide');
+            dev_tab.classList.add('hide');
+            sen_tab.classList.remove('hide');
+            log_tab.classList.add('hide');
+            ticket_tab.classList.add('hide');
+
+        });
+        document.getElementById('log-tab').addEventListener('click',()=>{
+            user_tab.classList.add('hide');
+            dev_tab.classList.add('hide');
+            sen_tab.classList.add('hide');
+            log_tab.classList.remove('hide');
+            ticket_tab.classList.add('hide');
+
+        });
+        document.getElementById('ticketing-tab').addEventListener('click',()=>{
+            user_tab.classList.add('hide');
+            dev_tab.classList.add('hide');
+            sen_tab.classList.add('hide');
+            log_tab.classList.add('hide');
+            ticket_tab.classList.remove('hide');
+
+        });
+        
+    </script>
 <script>
 
     // DeleteUserModal 
@@ -464,8 +549,9 @@
     // SelectUserJs
 
     // SelectDeviceJS
-// DevicesTabJs
+// ------> DevicesTabJs
 
+// FormVisibility
 var btn_add_dev = document.getElementById('btn_add_device');
 var btn_dev_cancel = document.getElementById('device_cancel')
 var dev_form = document.getElementById('device_form');
@@ -475,5 +561,44 @@ btn_add_dev.addEventListener('click',()=>{
 btn_dev_cancel.addEventListener('click',()=>{
     dev_form.classList.add('hide');
 });
+
+// FormEntries
+var btn_dev_save = document.getElementById('btn_device_save');
+btn_add_dev.addEventListener('click',  (e)=>{
+e.preventDefault();
+// let formObj = {
+//      dev_v_no : document.getElementById('vehicle_no').value,
+//      dev_r_name : document.getElementById('route_name').value,
+//      dev_temp : document.getElementById('temperature').value,
+//      dev_car_mono : document.getElementById('carbon_mono').value,
+//      dev_humi : document.getElementById('dev_dity').value,
+//      dev_light : document.getElementById('light').value,
+//      dev_noise : document.getElementById('noise').value,
+//      dev_long : document.getElementById('longitude').value,
+//      dev_lat : document.getElementById('latitude').value,
+// }
+
+// console.log(formObj.dev_v_no);
+// console.log(formObj.dev_r_name);
+// console.log(formObj.dev_temp);
+// console.log(formObj.dev_car_mono);
+// console.log(formObj.dev_humi);
+// console.log(formObj.dev_light);
+// console.log(formObj.dev_noise);
+// console.log(formObj.dev_long);
+// console.log(formObj.dev_lat);
+
+
+
+console.log('clicked');
+
+
+
+
+});
+
+
+
+
 </script>
 {% endblock %}

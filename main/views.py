@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm
 from django.urls import reverse_lazy
 from member.forms import RegisterUserForm
+from device.forms import DevicesForm
 from device.models import devices,sensors
 from django.http import HttpResponse
 import csv
@@ -56,8 +57,33 @@ def main_admin(request):
             djl_name = form.cleaned_data['last_name']
             
             user = authenticate(username = djusername, password = djpassword, email = djemail, first_name = djf_name, last_name = djl_name )
+
+            # AddDevices
+        if request.method!='POST':
+            dev_form = DevicesForm()   
+        else:
+            dev_form = DevicesForm(request.POST)
+        if dev_form.is_valid():
+            
+            # vehicle_no route_name  temperature carbon_mono  humidity light noise  langitude latitude
+            dj_v_no = dev_form.cleaned_data['vehicle_no']
+            dj_r_name = dev_form.cleaned_data['route_name']
+            dj_temp = dev_form.cleaned_data['temperature']
+            dj_co = dev_form.cleaned_data['carbon_mono']
+            dj_hum = dev_form.cleaned_data['humidity']
+            dj_light = dev_form.cleaned_data['light']
+            dj_noise = dev_form.cleaned_data['noise']
+            dj_long = dev_form.cleaned_data['latitude']
+            dj_lat = dev_form.cleaned_data['latitude']
+
+            dev = devices(vehicle_no=dj_v_no, route_name = dj_r_name,  temperature= dj_temp, carbon_mono = dj_co,  humidity = dj_hum, light = dj_light,  noise = dj_noise, langitude = dj_long, latitude = dj_lat)
+            dev.save()
+            
+       
+    
+            
         alldevices = devices.objects.all()    
-        context = {'users':users,'form':form,'devices':alldevices}
+        context = {'users':users,'form':form,'devices':alldevices, 'deviceForm':dev_form}
         return render (request,'main/main_admin.html',context)
     else:
         return render (request,'member/index.html')

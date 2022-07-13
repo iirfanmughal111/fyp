@@ -14,6 +14,7 @@ class devices(models.Model):
     noise = models.BooleanField(default=False)
     langitude = models.BooleanField(default=False)
     latitude = models.BooleanField(default=False)
+    # vehicle_no route_name  temperature carbon_mono  humidity light noise langitude latitude
     def __str__(self):
         return self.route_name
 
