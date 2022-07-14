@@ -88,7 +88,31 @@ def main_admin(request):
     else:
         return render (request,'member/index.html')
 
+def add_device(request):
+    if request.method=='POST':
+        # dev_form = DevicesForm()   
+    # else:
+        # dev_form = DevicesForm(request.POST)
+        # if dev_form.is_valid():
+            
+            # vehicle_no route_name  temperature carbon_mono  humidity light noise  langitude latitude
+            dj_v_no = request.POST.get['vehicle_no']
+            dj_r_name = request.POST.get['route_name']
+            dj_temp = request.POST.get['temperature']
+            dj_co = request.POST.get['carbon_mono']
+            dj_hum = request.POST.get['humidity']
+            dj_light = request.POST.get['light']
+            dj_noise = request.POST.get['noise']
+            dj_long = request.POST.get['latitude']
+            dj_lat = request.POST.get['latitude']
 
+            dev = devices(vehicle_no=dj_v_no, route_name = dj_r_name,  temperature= dj_temp, carbon_mono = dj_co,  humidity = dj_hum, light = dj_light,  noise = dj_noise, langitude = dj_long, latitude = dj_lat)
+            dev.save()
+            
+       
+    
+
+    return render (request,'main/main_admin.html')
 def user_change(request,user_id):
     User  = get_user_model().objects.get(id=user_id)
     if request.method == 'POST':
