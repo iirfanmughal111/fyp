@@ -1,47 +1,104 @@
 {% extends 'main/admin_basic.html' %}
 {%load static%}
-{% block title%}Add new user{% endblock%}
+{% block title%}Admin Panel{% endblock%}
 {% block design %}
 <style>
-    .hide{
+    .hide {
         display: none !important;
     }
 </style>
-  {%endblock%}
+{%endblock%}
 {% block fluid%}
 
-<!-- WithBootsrap 4 -->
 
-<div class="row m-5">
-    <div class="col-2">
-      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
-        <a class="nav-link " id="v-pills-users-tab" data-toggle="pill" href="#users" role="tab" aria-controls="v-pills-users" aria-selected="true">Users</a>
-        <a class="nav-link" id="devices-tab" data-toggle="pill" href="#devices" role="tab" aria-controls="devices" aria-selected="false">devices</a>
-        <a class="nav-link" id="sensors-tab" data-toggle="pill" href="#sensors" role="tab" aria-controls="sensors" aria-selected="false">Sensors</a>
-        <a class="nav-link" id="log-tab" data-toggle="pill" href="#log" role="tab" aria-controls="log" aria-selected="false">Log</a>
-        <a class="nav-link" id="ticketing-tab" data-toggle="pill" href="#ticketing" role="tab" aria-controls="ticketing" aria-selected="false">ticketing</a>
+<!-- MainWork -->
+<div class="row  mt-5 " style="min-height: 800px;">
 
-      </div>
+    <div class="col-lg-2 sidebar px-4">
+        <div class="row my-5 pt-5">
+            <div class="col-12">
+                <h3 class="text-white text-center">Vehicle Data <br>Acquisition Sysytem</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+            </div>
+            <nav class="nav flex-column mt-5">
+                <a class="nav-link my-link my-2 fw-bold rounded  border " data-bs-toggle="tab" href="#home">Home</a>
+                <a class="nav-link my-link my-2 fw-bold rounded border " data-bs-toggle="tab" href="#users">Users</a>
+                <a class="nav-link my-link my-2 fw-bold rounded border" data-bs-toggle="tab" href="#devices">Devices</a>
+                <a class="nav-link my-link my-2 fw-bold rounded border" data-bs-toggle="tab" href="#sensors">Sensors</a>
+                <a class="nav-link my-link my-2 fw-bold rounded border" data-bs-toggle="tab" href="#log">Log</a>
+                <a class="nav-link my-link my-2 fw-bold rounded border" data-bs-toggle="tab"
+                    href="#ticketing">Ticketing</a>
+            </nav>
+        </div>
+
     </div>
-    <div class="col-10">
-      <div class="tab-content" id="main_tab">
-        <div class="tab-pane fade show" id="home" role="tabpanel" aria-labelledby="home-tab">
-            {%load static%}
-            <img src="{% static 'member/images/uog.jpg' %}" class="img-fluid m-5 rounded-circle" alt="uog-img">
-        </div> 
-        <div class="tab-pane fade " id="users" role="tabpanel" aria-labelledby="users-tab">
+    <div class="col-lg-10 px-3">
+        <!-- TabContent -->
+        <div class="tab-content">
+            <div class="tab-pane active" id="home">
+                <div class="row d-flex justify-content-evenly">
+                    <div class="col-3 border border-primary rounded dashboard_box gradient_priamary">
+                        <div class="row ">
+                            <div
+                                class="col-12 justify-content-center text-white flex-column d-flex align-items-center dashboard_box">
+                                <h4>Total Users</h4>
+                                <i class="fa-solid fa-3x my-3 fa-users-line"></i>
+                                <h2>{{users.count}}</h2>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-3 border border-primary rounded dashboard_box gradient_secondary">
+                        <div class="row ">
+                            <div
+                                class="col-12 justify-content-center text-white flex-column d-flex align-items-center dashboard_box">
+                                <h4>Total Devices</h4>
+                                <i class="fa-solid fa-3x my-3 fa-memory"></i>
+                                <h2>{{devices.count}}</h2>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-3 border border-primary rounded dashboard_box gradient_thired">
+                        <div class="row ">
+                            <div
+                                class="col-12 justify-content-center text-white flex-column d-flex align-items-center dashboard_box">
+                                <h4>Total Sensors</h4>
+                                <i class="fa-solid fa-3x my-3 fa-microchip"></i>
+                                <h2>0</h2>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-8">
+                        {%load static%}
+                        <img src="{% static 'member/images/uog.jpg' %}" class="img-fluid m-5 rounded-circle"
+                            alt="uog-img">
+                    </div>
+                </div>
+
+
+            </div>
+
             <!-- Usesr Tab -->
-            
+            <div class="tab-pane mt-5" id="users" role="tabpanel" aria-labelledby="users-tab">
 
                 <!-- All user list in input fields -->
                 <div class="row border border-2 rounded">
-                    <div class="col-12 d-flex rounded-pill justify-content-end align-iteml-end">
-                        <a href="export_user_csv" class="btn my-3 ml-5 btn-primary " role="button">Export Users As CSV
-                            <i class="fa-solid ml-1 fa-file-export"></i> </a>
-                        <!-- <a href="add_new_user" class="btn my-3 ml-5 btn-primary " role="button">Add new <i
+                    <div class="col-12 d-flex rounded-pill justify-content-end align-items-end">
+                        <a href="export_user_csv" class="btn my-3 ms-5 btn-primary " role="button">Export Users As CSV
+                            <i class="fa-solid ms-1 fa-file-export"></i> </a>
+                        <!-- <a href="add_new_user" class="btn my-3 ms-5 btn-primary " role="button">Add new <i
                                 class="fa-solid fa-plus"></i> </a> -->
-                        <button type="button" class="btn my-3 ml-5 btn-primary" data-bs-toggle="modal"
+                        <button type="button" class="btn my-3 ms-5 btn-primary" data-bs-toggle="modal"
                             data-bs-whatever="{{user.username}}" id="btn_del" data-bs-target="#btn_add_user">
                             Add new user<i class="fa-solid fa-plus"></i>
                         </button>
@@ -51,47 +108,47 @@
                     </div>
                 </div>
                 <div class="row my-5">
-                <div class="col-12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Last Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">View</th>
-                                <th scope="col">Delete</th>
+                    <div class="col-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">View</th>
+                                    <th scope="col">Delete</th>
 
 
 
-                            </tr>
-                        </thead>
-                        <tbody>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                            {% for user in users%}
-                            <tr>
-                                <th scope="row">{{user.id}}</th>
-                                <td>{{user.username}}</td>
-                                <td>{{user.first_name}}</td>
-                                <td>{{user.last_name}}</td>
-                                <td>{{user.email}}</td>
-                                <td>
-                                    <a href="user_change/{{user.id}}" class="btn ml-3  btn-primary" role="button">View<i
-                                            class="fa-solid ml-1 fa-pen-to-square"></i></a>
-                                </td>
-                                <td><button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                        data-bs-whatever="{{user.username}}" id="btn_del"
-                                        data-bs-target="#btn_del_modal">
-                                        Delete<i class="fa-solid ml-1 fa-trash-can"></i>
-                                    </button></td>
-                            </tr>
-                            {%endfor%}
+                                {% for user in users%}
+                                <tr>
+                                    <th scope="row">{{user.id}}</th>
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.first_name}}</td>
+                                    <td>{{user.last_name}}</td>
+                                    <td>{{user.email}}</td>
+                                    <td>
+                                        <a href="user_change/{{user.id}}" class="btn ms-3  btn-primary"
+                                            role="button">View<i class="fa-solid ms-1 fa-pen-to-square"></i></a>
+                                    </td>
+                                    <td><button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-whatever="{{user.username}}" id="btn_del"
+                                            data-bs-target="#btn_del_modal">
+                                            Delete<i class="fa-solid ms-1 fa-trash-can"></i>
+                                        </button></td>
+                                </tr>
+                                {%endfor%}
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
 
                 <!-- AddNewUserModal -->
@@ -169,7 +226,7 @@
                             <div class="modal-footer">
                                 <!-- Href Set in JS -->
                                 <a href="#" class="btn btn-danger" id="del_user_btn" role="button">Delete<i
-                                        class="fa-solid ml-1 fa-trash-can"></i></a>
+                                        class="fa-solid ms-1 fa-trash-can"></i></a>
                                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
 
                             </div>
@@ -184,69 +241,49 @@
 
 
 
-            
+            </div>
             <!-- Usesr Tab End -->
-        </div>
-        <div class="tab-pane fade" id="devices" role="tabpanel" aria-labelledby="devices-tab">
-            
+
+
             <!-- Devices Tab -->
 
-            
+            <div class="tab-pane " id="devices">
 
                 <div class="row border border-2 rounded">
-                    <div class="col-12 d-flex rounded-pill justify-content-end align-iteml-end">
-                        <a href="#" class="btn my-3 ml-5 btn-primary " role="button">Export Devices As CSV
-                            <i class="fa-solid ml-1 fa-file-export"></i> </a>
+                    <div class="col-12 d-flex rounded-pill justify-content-end align-items-end">
+                        <a href="#" class="btn my-3 ms-5 btn-primary " role="button">Export Devices As CSV
+                            <i class="fa-solid ms-1 fa-file-export"></i> </a>
 
-                        <!-- <button type="button" class="btn my-3 ml-5 btn-primary" id="btn_add_device">
+                        <button type="button" class="btn my-3 ms-5 btn-primary" id="btn_add_device">
                             Add new <i class="fa-solid fa-plus"></i>
-                        </button> -->
-                        <button type="button" class="btn my-3 ml-5 btn-primary" data-bs-toggle="modal"
+                        </button>
+                        <!-- <button type="button" class="btn my-3 ms-5 btn-primary" data-bs-toggle="modal"
                              data-bs-target="#btn_add_user">
                             Add new <i class="fa-solid fa-plus"></i>
-                    </button>
+                    </button> -->
 
                     </div>
                 </div>
                 <!-- AddNewDeviceForm -->
                 <div class="row my-5 border border-3 rounded shadow p-5 hide" id="device_form">
+
                     <div class="col-12">
+                        <h6 id="dev_save_text"></h6>
                         <div class="row d-flex justify-content-end">
-                            <div class="col-auto"><button class="btn btn-outline-danger btn-close" id="device_cancel"></button></div>
+                            <div class="col-auto"><button class="btn btn-outline-danger btn-close"
+                                    id="device_cancel"></button></div>
                         </div>
-                        <!-- <form action="" method="POST">
+                        <form id="dev_form" method="POST">
                             {% csrf_token %}
                             {{deviceForm}}
-                            <button>save device</button>
-                        </form> -->
-                        <form action="" method="">
-                            {% csrf_token %}
-                            <label for="" class="form-label"> Vehicle #</label>
-                            <input class="form-control" type="number" name="vehicle_no" >
-                            <label for="" class="form-label"> Route Name</label>
-                            <input class="form-control" type="text" name="route_name"><br>
-                            <h5>Including sensors:</h5>
-                            <label for="" class="form-label">  Temperature</label>
-                            <input class="form-check-input" type="checkbox" name="temperature">
-                            <label for="" class="form-label"> Carbon Mono </label>
-                            <input class="form-check-input" type="checkbox" name="carbon_mono">
-                            <label for="" class="form-label"> Humidity</label>
-                            <input class="form-check-input" type="checkbox" name="humidity">
-                            <label for="" class="form-label"> Light </label>
-                            <input class="form-check-input" type="checkbox" name="light">
-                            <label for="" class="form-label"> Noise </label>
-                            <input class="form-check-input" type="checkbox" name="noise">
-                            <label for="" class="form-label"> longitude</label>
-                            <input class="form-check-input" type="checkbox" name="longitude">
-                            <label for="" class="form-label"> latitude</label>
-                            <input class="form-check-input" type="checkbox" name="latitude"><br>
-                            <button class="btn btn-outline-primary" id="btn_device_save" type="submit">Save</button>
+                            <button class="btn btn-primary" id="btn_device_save">save device</button>
                         </form>
                     </div>
                 </div>
 
 
                 <!-- AllDevicesList -->
+                {{devices_form.as_p}}
                 <div class="row my-5">
                     <div class="col-12">
                         <table class="table table-striped">
@@ -262,10 +299,13 @@
                                     <th scope="col">Noise</th>
                                     <th scope="col">long</th>
                                     <th scope="col">lat</th>
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Delete</th>
+
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="table_body">
 
                                 {% for device in devices%}
                                 <tr>
@@ -279,6 +319,16 @@
                                     <td>{{device.noise}}</td>
                                     <td>{{device.langitude}}</td>
                                     <td>{{device.latitude}}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm ms-3  btn-primary" role="button">Edit<i
+                                                class="fa-solid ms-1 fa-pen-to-square"></i></a>
+                                    </td>
+                                    <td><button type="button" class="btn btn-sm btn-danger" id="btn_dev_del">
+                                            Delete<i class="fa-solid ms-1 fa-trash-can"></i>
+                                        </button></td>
+
+
+
                                 </tr>
                                 {%endfor%}
 
@@ -288,206 +338,159 @@
                 </div>
 
 
-                <!-- AddNewdeviceModal -->
-                <div class="modal fade " id="btn_add_device" tabindex="-1" aria-labelledby="AdddeviceModal"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="AdddeviceModal">Add new device</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
 
-                                <div class="row d-flex my-5 justify-content-center">
-                                    <div class="col-11 rounded shadow">
-                                        <h1 class="mb-5 text-center">Add new device</h1>
-                                        {% if form.errors %}
-                                        {% for field in form %}
-                                        {% for error in field.errors %}
-                                        <div class="alert alert-danger">
-                                            <strong>{{ error|escape }}</strong>
-                                        </div>
-                                        {% endfor %}
-                                        {% endfor %}
-
-                                        {% for error in form.non_field_errors %}
-                                        <div class="alert alert-danger">
-                                            <strong>{{ error|escape }}</strong>
-                                        </div>
-                                        {% endfor %}
-
-                                        {% endif %}
-
-
-                                        <form method="POST" action="">
-                                            {{deviceform}}
-                                            {% csrf_token %}
-                                            <br>
-                                            <button type="submit" class="btn btn-primary"
-                                                data-bs-dismiss="modal">Submit</button>
-                                        </form>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <p>device Fotter</p>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- EndNewDeviceModal -->
 
                 <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
                     class="img-fluid m-5 rounded-circle" alt="uog-img">
-            
+            </div>
 
             <!-- Devices Tab End -->
-        </div>
-        <div class="tab-pane fade" id="sensors" role="tabpanel" aria-labelledby="sensors-tab">
+
+
+
             <!-- Sensors Tab  -->
 
-            
+            <div class="tab-pane " id="sensors">
                 all sensors with their device id
                 <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
                     class="img-fluid m-5 rounded-circle" alt="uog-img">
-            
+            </div>
 
             <!-- Sensors Tab End -->
-        </div>
-        <div class="tab-pane fade" id="log" role="tabpanel" aria-labelledby="log-tab">
-            
-                        <!-- Log Tab  -->
 
-                        
-                            all sensors log
-                            <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
-                                class="img-fluid m-5 rounded-circle" alt="uog-img">
-                        
-            
-                        <!-- Log Tab End -->
-        </div>
-        <div class="tab-pane fade" id="ticketing" role="tabpanel" aria-labelledby="ticketing-tab">
-            
+            <!-- Log Tab  -->
+
+            <div class="tab-pane " id="log">
+                all sensors log
+                <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
+                    class="img-fluid m-5 rounded-circle" alt="uog-img">
+            </div>
+
+            <!-- Log Tab End -->
+
             <!-- Tickting Tab  -->
 
-            
+            <div class="tab-pane " id="ticketing">
                 <div class="row my-5">
                     <div class="col-12 my-3">
                         <form class="d-flex">
-                            <input class="form-control ml-2" type="search" placeholder="Search" aria-label="Search">
+                            <input class="form-control ms-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                     </div>
                 </div>
-                    <!-- mainRow -->
-                    <div class="row">
-                        <div class="col-12">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Username</th>
-                                        <th scope="col">Devices</th>
-                                        <th scope="col">temp</th>
-                                        <th scope="col">CO</th>
-                                        <th scope="col">Humidity</th>
-                                        <th scope="col">Light</th>
-                                        <th scope="col">Noise</th>
-                                        <th scope="col">GPS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                <!-- mainRow -->
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Devices</th>
+                                    <th scope="col">temp</th>
+                                    <th scope="col">CO</th>
+                                    <th scope="col">Humidity</th>
+                                    <th scope="col">Light</th>
+                                    <th scope="col">Noise</th>
+                                    <th scope="col">GPS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                                    {% for user in users%}
-                                    {% if not user.is_superuser%}
-                                    <tr>
-                                        <th scope="row">{{user.id}}</th>
-                                        <td>{{user.username}}</td>
-                                        <td>
+                                {% for user in users%}
+                                {% if not user.is_superuser%}
+                                <tr>
+                                    <th scope="row">{{user.id}}</th>
+                                    <td>{{user.username}}</td>
+                                    <td>
 
-                                            <select class="custom-select" aria-label="Default select example">
-                                                <option selected disabled>Select device</option>
-                                                {% for device in devices%}
-                                                <option value="{{device.device_id}}">{{device.device_id}}
-                                                    {{device.route_name}}</option>
-                                                {%endfor%}
-                                            </select>
-                                        </td>
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option selected disabled>Select device</option>
+                                            {% for device in devices%}
+                                            <option value="{{device.device_id}}">{{device.device_id}}
+                                                {{device.route_name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </td>
 
 
-                                        <td>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
-                                                <label class="custom-control-label" for="customSwitch1">0/1</label>
-                                            </div>
-                                        </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                                checked>
+                                        </div>
+                                    </td>
 
-                                        <td>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
-                                                <label class="custom-control-label" for="customSwitch1">0/1</label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
-                                                <label class="custom-control-label" for="customSwitch1">0/1</label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
-                                                <label class="custom-control-label" for="customSwitch1">0/1</label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
-                                                <label class="custom-control-label" for="customSwitch1">0/1</label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
-                                                <label class="custom-control-label" for="customSwitch1">0/1</label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {%endif%}
-                                    {%endfor%}
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                                checked>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                                checked>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                                checked>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                                checked>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                                                checked>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {%endif%}
+                                {%endfor%}
 
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
 
 
-          
+
 
 
 
 
                 <img src="{% static 'member/images/uog.jpg' %}" style="max-width: 400px; max-height:400px;"
                     class="img-fluid m-5 rounded-circle" alt="uog-img">
-            
+            </div>
 
             <!-- ticketing Tab End -->
-</div>
-      </div>
-    </div>
-  </div>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-    crossorigin="anonymous"></script>-->
-     
-        <!-- js BS-4 -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+        </div>
+        <!-- End Tab Content -->
+    </div>
+</div>
+{% include 'main/ajax.html' %}
+
+<script src="{% static 'main/js/jquery.js' %}"> </script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+<script src="{% static 'main/js/custom.js' %}"></script>
+{% include 'main/ajax.html' %}
+
+
 <script>
     // DeleteUserModal 
     var deleteModal = document.getElementById('btn_del_modal')
@@ -509,55 +512,18 @@
     // SelectUserJs
 
     // SelectDeviceJS
-// ------> DevicesTabJs
+    // ------> DevicesTabJs
 
-// FormVisibility
-var btn_add_dev = document.getElementById('btn_add_device');
-var btn_dev_cancel = document.getElementById('device_cancel')
-var dev_form = document.getElementById('device_form');
-btn_add_dev.addEventListener('click',()=>{
-    dev_form.classList.remove('hide');
-});
-btn_dev_cancel.addEventListener('click',()=>{
-    dev_form.classList.add('hide');
-});
-
-// FormEntries
-var btn_dev_save = document.getElementById('btn_device_save');
-btn_add_dev.addEventListener('click',  (e)=>{
-e.preventDefault();
-// let formObj = {
-//      dev_v_no : document.getElementById('vehicle_no').value,
-//      dev_r_name : document.getElementById('route_name').value,
-//      dev_temp : document.getElementById('temperature').value,
-//      dev_car_mono : document.getElementById('carbon_mono').value,
-//      dev_humi : document.getElementById('dev_dity').value,
-//      dev_light : document.getElementById('light').value,
-//      dev_noise : document.getElementById('noise').value,
-//      dev_long : document.getElementById('longitude').value,
-//      dev_lat : document.getElementById('latitude').value,
-// }
-
-// console.log(formObj.dev_v_no);
-// console.log(formObj.dev_r_name);
-// console.log(formObj.dev_temp);
-// console.log(formObj.dev_car_mono);
-// console.log(formObj.dev_humi);
-// console.log(formObj.dev_light);
-// console.log(formObj.dev_noise);
-// console.log(formObj.dev_long);
-// console.log(formObj.dev_lat);
-
-
-
-console.log('clicked');
-
-
-
-
-});
-
-
+    // FormVisibility
+    var btn_add_dev = document.getElementById('btn_add_device');
+    var btn_dev_cancel = document.getElementById('device_cancel')
+    var dev_form = document.getElementById('device_form');
+    btn_add_dev.addEventListener('click', () => {
+        dev_form.classList.remove('hide');
+    });
+    btn_dev_cancel.addEventListener('click', () => {
+        dev_form.classList.add('hide');
+    });
 
 
 </script>

@@ -1,0 +1,68 @@
+<script>
+   console.log(document.getElementById('dev_form'));
+   var dev_save_text = document.getElementById('dev_save_text');
+   $('#btn_device_save').click(function (e) {
+      console.log('2 click');
+
+      e.preventDefault();
+      output = "";
+      let dev_v_no = $('#id_vehicle_no').val();
+      let dev_r_name = $('#id_route_name').val();
+      let dev_temp = $('#id_temperature').val();
+      let dev_car_mono = $('#id_carbon_mono').val();
+      let dev_humi = $('#id_humidity').val();
+      let dev_light = $('#id_light').val();
+      let dev_noise = $('#id_noise').val();
+      let dev_long = $('#id_langitude').val();
+      let dev_lat = $('#id_latitude').val();
+      let csrf = $("input[name=csrfmiddlewaretoken]").val();
+
+      // vehicle_no route_name  temperature carbon_mono  humidity light noise  langitude latitude
+      var mydata = { 'vehicle_no': dev_v_no, 'route_name': dev_r_name, 'temperature': dev_temp, 'carbon_mono': dev_car_mono, 'humidity': dev_humi, 'light': dev_light, 'noise': dev_noise, 'langitude': dev_long, 'latitude': dev_lat, 'csrfmiddlewaretoken': csrf };
+      $.ajax({
+         url: "{% url 'add_device' %}",
+         method: "POST",
+         data: mydata,
+         success: function (data) {
+            $('#dev_save_text').html(data.status);
+            dev = data.devicesList;
+               // for(i=0;i<dev.length;i++){
+               //    console.log(dev[i].vehicle_no);
+               //    console.log(dev[i].route_name);
+
+               // }
+            
+               for(i=0;i<dev.length;i++){
+               output += "<tr><td>" +
+                    dev[i].device_id +"</td><td>"
+                  + dev[i].vehicle_no + "</td><td>"
+                  + dev[i].route_name + "</td><td>"
+                  + dev[i].temperature + "</td><td>"
+                  + dev[i].carbon_mono + "</td><td>"
+                  + dev[i].humidity + "</td><td>"
+                  + dev[i].light + "</td><td>"
+                  + dev[i].noise + "</td><td>"
+                  + dev[i].langitude + "</td><td>" +
+                  dev[i].latitude + "</td></tr>";
+            // console.log("OutPut");
+            // console.log(output);
+
+            }
+            $("form")[0].reset();
+            tablebody = document.getElementById('table_body');
+            $("#table_body").html(output);
+            console.log($("#dev_form"));
+            console.log("tableL "+tablebody);
+            $('#table_body').html(output);
+
+
+            
+
+
+         }
+      });
+
+   });
+
+
+</script>

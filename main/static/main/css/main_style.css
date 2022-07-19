@@ -1,4 +1,37 @@
-.bg-div{
-    background: rgb(34,193,195);
-    background: linear-gradient(0deg, rgba(34,193,195,1) 32%, rgba(45,234,253,1) 65%);
-    }
+.dashboard_box {
+    min-height: 200px;
+}
+
+.gradient_priamary {
+    background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);
+}
+
+.gradient_secondary {
+    background-image: linear-gradient(to top, #1e3c72 0%, #1e3c72 1%, #2a5298 100%);
+
+}
+
+.gradient_thired {
+
+    background-image: linear-gradient(to right, #3ab5b0 0%, #3d99be 31%, #56317a 100%);
+
+}
+
+.sidebar{
+    background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
+}
+.nav-link{
+    color: white !important;
+}
+.nav-link:hover{
+    color: #3b4551 !important;
+    background-color: white;
+    
+    
+}
+.my-link:active{
+    color: #3b4551 !important;
+    background-color: black !important;
+    font-weight: bold; 
+    
+}
