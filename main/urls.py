@@ -14,7 +14,7 @@ urlpatterns = [
     # main_Admin paths
     path('main_admin',views.main_admin,name='main_admin'),
     path('export_user_csv',views.export_user_csv,name='export_user_csv'),
-    path('user_change/<int:user_id>',views.user_change,name='user_change'),
+    path('user_change/<str:user_name>',views.user_change,name='user_change'),
     path('delete_user/<str:user_name>',views.delete_user,name='delete_user'),
     path('add_new_user',views.Add_New_User,name='add_new_user'),
     

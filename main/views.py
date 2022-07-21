@@ -50,12 +50,7 @@ def main_admin(request):
         users = Paginator(rev_users,15)
         page_list = request.GET.get('page')
         users=users.get_page(page_list)
-
-        # rev_devices = devices.objects.all().order_by('-device_id')
-        # device_page = Paginator(rev_devices,15)
-        # page_list = request.GET.get('page')
-        # device_page = device_page.get_page(page_list)
-        
+        totalUser = User.objects.all().count()
         # Adding new Users 
         if request.method!='POST':
             form = RegisterUserForm()   
@@ -78,14 +73,16 @@ def main_admin(request):
         rev_devices = devices.objects.all().order_by('-device_id')
         device_page = Paginator(rev_devices,15)
         page_list = request.GET.get('page')
-        device_page = device_page.get_page(page_list) 
+        device_page = device_page.get_page(page_list)
+        totaldevices = devices.objects.all().count()
+
 
             
        
     
             
            
-        context = {'users':users,'form':form,'devices':device_page, 'deviceForm':dev_form}
+        context = {'users':users,'form':form,'devices':device_page, 'deviceForm':dev_form,'totalUser':totalUser,'totaldevices':totaldevices}
         # context = {'users':users,'form':form,'devices':alldevices, }
 
         return render (request,'main/main_admin.html',context)
@@ -165,17 +162,18 @@ def load_more(request):
         # users = User.objects.all()
         offset = int(request.POST['offset'])
         limit = 10
+        serial  = offset+limit
         total_users= AllUser.objects.all().count()
         if offset>=total_users:
             return JsonResponse({'status':0,})
         else:
-            allusers = AllUser.objects.all()[offset:offset+limit]         
+            allusers = User.objects.all()[offset:offset+limit]         
             userList = serializers.serialize('json',allusers)
-        return JsonResponse({'usersList':userList,'total_rows':total_users})
+        return JsonResponse({'usersList':userList,'total_rows':total_users,'serial':serial})
 
 
-def user_change(request,user_id):
-    User  = get_user_model().objects.get(id=user_id)
+def user_change(request,user_name):
+    User  = get_user_model().objects.get(username=user_name)
     if request.method == 'POST':
         User.username  = request.POST.get('username')
         User.first_name  = request.POST.get('first_name')

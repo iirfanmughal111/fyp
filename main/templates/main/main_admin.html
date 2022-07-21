@@ -46,7 +46,7 @@
                                 class="col-12 justify-content-center text-white flex-column d-flex align-items-center dashboard_box">
                                 <h4>Total Users</h4>
                                 <i class="fa-solid fa-3x my-3 fa-users-line"></i>
-                                <h2>{{users.count}}</h2>
+                                <h2>{{totalUser}}</h2>
                             </div>
                         </div>
 
@@ -57,7 +57,7 @@
                                 class="col-12 justify-content-center text-white flex-column d-flex align-items-center dashboard_box">
                                 <h4>Total Devices</h4>
                                 <i class="fa-solid fa-3x my-3 fa-memory"></i>
-                                <h2>{{devices.count}}</h2>
+                                <h2>{{totaldevices}}</h2>
                             </div>
                         </div>
 
@@ -124,11 +124,12 @@
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="user_tbody">
 
                                 {% for user in users%}
                                 <tr class="usersCount">
-                                    <th scope="row">{{user.id}}</th>
+                                    <!-- <th scope="row">{{user.id}}</th> -->
+                                    <th scope="row">{{ forloop.counter }}</th>
                                     <td>{{user.username}}</td>
                                     <td>{{user.first_name}}</td>
                                     <td>{{user.last_name}}</td>
@@ -150,7 +151,7 @@
                         </table>
                         <div class="row d-flex justify-content-center">
                                 <div class="col-2">
-                                    <a type="button" class="btn btn-dark rounded-pill" id="btn_load_more">Load more</a>
+                                    <a type="button" class="btn btn-primary" id="btn_load_more">Load more</a>
                                 </div>
                             </div>
                     </div>
