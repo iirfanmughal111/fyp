@@ -6,8 +6,8 @@ from traitlets import default
 
 class DevicesForm (forms.Form):
     # device_id = forms.
-    vehicle_no = forms.IntegerField(required=False,widget=forms.TextInput(attrs={'class':'form-control my-2',}))
-    route_name = forms.CharField(required=False,max_length=50,widget=forms.TextInput(attrs={'class':'form-control my-2'}))
+    vehicle_no = forms.IntegerField(widget=forms.TextInput(attrs={'class':'form-control my-2',}))
+    route_name = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'class':'form-control my-2'}))
     temperature = forms.BooleanField(required=False,initial= False,widget=forms.CheckboxInput(attrs={'class':'form-check-input my-2','required':'False'}))
     carbon_mono = forms.BooleanField(required=False,initial= False,widget=forms.CheckboxInput(attrs={'class':'form-check-input my-2'}))
     humidity = forms.BooleanField(required=False,initial= False,widget=forms.CheckboxInput(attrs={'class':'form-check-input my-2'}))

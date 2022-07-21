@@ -15,14 +15,16 @@ from device.models import devices,sensors
 from django.http import HttpResponse, JsonResponse
 import csv
 from django.contrib.auth.decorators import login_required
-
-# from django.views.decorators.csrf import csrf_exempt
+# from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 # from . models import contact_us_db
 from json import dumps
 #For User model
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from urllib3 import HTTPResponse
+from django.core.paginator import Paginator,EmptyPage
+from django.core import serializers
 
 
 
@@ -44,7 +46,15 @@ def main_admin(request):
     if request.user.is_superuser:
         # Getting All user
         User = get_user_model()
-        users = User.objects.all()
+        rev_users = User.objects.all().order_by('-id')
+        users = Paginator(rev_users,15)
+        page_list = request.GET.get('page')
+        users=users.get_page(page_list)
+
+        # rev_devices = devices.objects.all().order_by('-device_id')
+        # device_page = Paginator(rev_devices,15)
+        # page_list = request.GET.get('page')
+        # device_page = device_page.get_page(page_list)
         
         # Adding new Users 
         if request.method!='POST':
@@ -64,34 +74,18 @@ def main_admin(request):
         dev_form = DevicesForm()
 
         # AllDevicesList
-        alldevices = devices.objects.all() 
+        # alldevices = devices.objects.all() 
+        rev_devices = devices.objects.all().order_by('-device_id')
+        device_page = Paginator(rev_devices,15)
+        page_list = request.GET.get('page')
+        device_page = device_page.get_page(page_list) 
 
-            # AddDevices
-        # if request.method!='POST':
-        #     dev_form = DevicesForm(use_required_attribute=False)   
-        # else:
-        #     dev_form = DevicesForm(request.POST,use_required_attribute=False)
-        # if dev_form.is_valid():
-            
-        #     # vehicle_no route_name  temperature carbon_mono  humidity light noise  langitude latitude
-        #     dj_v_no = dev_form.cleaned_data['vehicle_no']
-        #     dj_r_name = dev_form.cleaned_data['route_name']
-        #     dj_temp = dev_form.cleaned_data['temperature']
-        #     dj_co = dev_form.cleaned_data['carbon_mono']
-        #     dj_hum = dev_form.cleaned_data['humidity']
-        #     dj_light = dev_form.cleaned_data['light']
-        #     dj_noise = dev_form.cleaned_data['noise']
-        #     dj_long = dev_form.cleaned_data['latitude']
-        #     dj_lat = dev_form.cleaned_data['latitude']
-
-        #     dev = devices(vehicle_no=dj_v_no, route_name = dj_r_name,  temperature= dj_temp, carbon_mono = dj_co,  humidity = dj_hum, light = dj_light,  noise = dj_noise, langitude = dj_long, latitude = dj_lat)
-        #     dev.save()
             
        
     
             
            
-        context = {'users':users,'form':form,'devices':alldevices, 'deviceForm':dev_form}
+        context = {'users':users,'form':form,'devices':device_page, 'deviceForm':dev_form}
         # context = {'users':users,'form':form,'devices':alldevices, }
 
         return render (request,'main/main_admin.html',context)
@@ -147,17 +141,39 @@ def add_device(request):
             dev.save()
             alldevices = devices.objects.values()
             devicesList = list(alldevices)
-            # print(devicesList)
            
-            return JsonResponse({'status':'Deveice added successfully','devicesList':devicesList})
+            return JsonResponse({'status':1,'devicesList':devicesList})
         else:
-            return JsonResponse({'status':'Something went wrong'})
+            return JsonResponse({'status':0})
 
+def delete_device(request):
+    if request.method=='POST':
+        dj_dev_id = request.POST.get('dj_dev_id',False)
+        del_dev  = devices.objects.get(device_id=dj_dev_id)
+        del_dev.delete()
+        alldevices = devices.objects.values()
+        devicesList = list(alldevices)
+        return JsonResponse({'status':1,'devicesList':devicesList})
+    else:
+        return JsonResponse({'status':0})
 
-    # context = {'devices_form':device_form}        
-    # return render (request,'main/test.html' ,context)   
+    # return redirect('main_admin')
    
-            
+def load_more(request):
+    if request.method=='POST':
+        AllUser = get_user_model()
+        # users = User.objects.all()
+        offset = int(request.POST['offset'])
+        limit = 10
+        total_users= AllUser.objects.all().count()
+        if offset>=total_users:
+            return JsonResponse({'status':0,})
+        else:
+            allusers = AllUser.objects.all()[offset:offset+limit]         
+            userList = serializers.serialize('json',allusers)
+        return JsonResponse({'usersList':userList,'total_rows':total_users})
+
+
 def user_change(request,user_id):
     User  = get_user_model().objects.get(id=user_id)
     if request.method == 'POST':
@@ -231,13 +247,11 @@ def export_user_csv(request):
     response['Content-disposition'] = 'attachment; filename = "user.csv"'    
     return response
 
-
 def delete_user(request,user_name):
     User  = get_user_model().objects.get(username=user_name)
     User.delete()
     # return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
     return redirect('main_admin')
-
 
 def Add_New_User(request):
     if request.method=='POST':

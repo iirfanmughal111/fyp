@@ -1,11 +1,10 @@
 <script>
-   console.log(document.getElementById('dev_form'));
-   var dev_save_text = document.getElementById('dev_save_text');
+   // var dev_save_text = document.getElementById('dev_save_text');
    $('#btn_device_save').click(function (e) {
-      console.log('2 click');
 
       e.preventDefault();
       output = "";
+      $('#dev_save_text').addClass('hide');
       let dev_v_no = $('#id_vehicle_no').val();
       let dev_r_name = $('#id_route_name').val();
       let dev_temp = $('#id_temperature').val();
@@ -17,24 +16,33 @@
       let dev_lat = $('#id_latitude').val();
       let csrf = $("input[name=csrfmiddlewaretoken]").val();
 
-      // vehicle_no route_name  temperature carbon_mono  humidity light noise  langitude latitude
+
       var mydata = { 'vehicle_no': dev_v_no, 'route_name': dev_r_name, 'temperature': dev_temp, 'carbon_mono': dev_car_mono, 'humidity': dev_humi, 'light': dev_light, 'noise': dev_noise, 'langitude': dev_long, 'latitude': dev_lat, 'csrfmiddlewaretoken': csrf };
       $.ajax({
          url: "{% url 'add_device' %}",
          method: "POST",
          data: mydata,
          success: function (data) {
-            $('#dev_save_text').html(data.status);
-            dev = data.devicesList;
-               // for(i=0;i<dev.length;i++){
-               //    console.log(dev[i].vehicle_no);
-               //    console.log(dev[i].route_name);
+            // $('#dev_save_text').html(data.status);
 
-               // }
-            
-               for(i=0;i<dev.length;i++){
+            if (data.status == 1) {
+               $('#dev_success_alert').removeClass('hide');
+               $('#dev_error_alert').addClass('hide');
+
+
+            }
+            else if (data.status == 0) {
+               $('#dev_error_alert').removeClass('hide');
+               $('#dev_success_alert').addClass('hide');
+
+
+            }
+
+            dev = data.devicesList;
+
+            for (i = 0; i < dev.length; i++) {
                output += "<tr><td>" +
-                    dev[i].device_id +"</td><td>"
+                  dev[i].device_id + "</td><td>"
                   + dev[i].vehicle_no + "</td><td>"
                   + dev[i].route_name + "</td><td>"
                   + dev[i].temperature + "</td><td>"
@@ -42,27 +50,212 @@
                   + dev[i].humidity + "</td><td>"
                   + dev[i].light + "</td><td>"
                   + dev[i].noise + "</td><td>"
-                  + dev[i].langitude + "</td><td>" +
-                  dev[i].latitude + "</td></tr>";
-            // console.log("OutPut");
-            // console.log(output);
+                  + dev[i].langitude + "</td><td>"
+                  + dev[i].latitude + "</td><td><a href='#' class='btn btn-sm ms-3  btn-primary' role='button'>Edit<i class='fa-solid ms-1 fa-pen-to-square'></i></a></td><td><button type='button' class='btn btn-sm btn-danger' data-bs-toggle='modal' data-bs-target='#btn_del_dev_modal' data-bs-whatever=" + dev[i].device_id + "  id='btn_dev_del' >Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
+
+               // <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+               //                           data-bs-whatever="{{device.device_id}}" id="btn_dev_del"
+               //                           data-bs-target="#btn_del_dev_modal">
+               //                           Delete<i class="fa-solid ms-1 fa-trash-can"></i>
+               //                       </button>
 
             }
-            $("form")[0].reset();
-            tablebody = document.getElementById('table_body');
-            $("#table_body").html(output);
-            console.log($("#dev_form"));
-            console.log("tableL "+tablebody);
+
             $('#table_body').html(output);
-
-
-            
-
-
+            document.getElementById("dev_form").reset();
+            document.getElementById("device_form").classList.add("hide");
          }
       });
 
    });
+
+   // deleteDevice
+
+   var deleteDevModal = document.getElementById('btn_del_dev_modal')
+   deleteDevModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget;
+      var device_del_id = button.getAttribute('data-bs-whatever');
+      var modalTitle = deleteDevModal.querySelector('.modal-title');
+      var modalBodyText = deleteDevModal.querySelector('.modal-body #del_dev_id');
+      modalTitle.textContent = " Delete '" + device_del_id + "' ?";
+      modalBodyText.textContent = " Are you sure to delete device with id' " + device_del_id + "' ? ";
+
+
+      // ajax functionality
+      $('#del_dev_btn').click(function (e) {
+         output = "";
+         let csrf = $("input[name=csrfmiddlewaretoken]").val();
+
+         myDelData = { 'dj_dev_id': device_del_id, 'csrfmiddlewaretoken': csrf };
+
+         $.ajax({
+            url: "{% url 'delete_device' %}",
+            method: "POST",
+            data: myDelData,
+            success: function (data) {
+               if (data.status == 1) {
+                  $('#dev_success_alert').removeClass('hide');
+                  $('#dev_error_alert').addClass('hide');
+
+               }
+               else if (data.status == 0) {
+                  $('#dev_error_alert').removeClass('hide');
+                  $('#dev_success_alert').addClass('hide');
+
+               }
+
+               dev = data.devicesList;
+               for (i = 0; i < dev.length; i++) {
+                  output += "<tr><td>" +
+                     dev[i].device_id + "</td><td>"
+                     + dev[i].vehicle_no + "</td><td>"
+                     + dev[i].route_name + "</td><td>"
+                     + dev[i].temperature + "</td><td>"
+                     + dev[i].carbon_mono + "</td><td>"
+                     + dev[i].humidity + "</td><td>"
+                     + dev[i].light + "</td><td>"
+                     + dev[i].noise + "</td><td>"
+                     + dev[i].langitude + "</td><td>"
+                     + dev[i].latitude + "</td><td><a href='#' class='btn btn-sm ms-3  btn-primary' role='button'>Edit<i class='fa-solid ms-1 fa-pen-to-square'></i></a></td><td><button type='button' class='btn btn-sm btn-danger' data-bs-toggle='modal' data-bs-target='#btn_del_dev_modal' data-bs-whatever=" + dev[i].device_id + "  id='btn_dev_del' >Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
+
+               }
+
+               $('#table_body').html(output);
+
+            }
+         }); //Ajax closed
+
+      });// main func
+
+   });//modal func END
+
+   //Load More
+   $(document).ready(function (e) {
+
+$('#btn_load_more').click(function (e) {
+
+e.preventDefault();
+output = "";
+let csrf = $("input[name=csrfmiddlewaretoken]").val();
+// href="{%url 'main_admin'%}?page={{devices.num_page}}"
+var offset = $('.usersCount').length;
+console.log('coffset='+offset);
+
+var mydata = { 'offset':offset,'csrfmiddlewaretoken': csrf };
+$.ajax({
+   url: "{% url 'loadmore' %}",
+   method: "POST",
+   data: mydata,
+   dataType:'json',
+   beforeSend:function(){
+   $('#btn_load_more').addClass('disabled').text('loading');
+   },
+   success: function (data) {
+      if (data.status==0){
+   $('#btn_load_more').addClass('disabled').text('No more users');
+
+      }
+      else{
+   $('#btn_load_more').removeClass('disabled').text('Load more');
+            u = data.usersList;
+            var output = '';
+            var json_data = $.parseJSON(data.usersList);
+            $.each(json_data,function(index,data){
+               output += "<tr class='usersCount'><th scope='row'>{{user.id}}</th><td>{{user.username}}</td>
+                                    <td>{{user.first_name}}</td>
+                                    <td>{{user.last_name}}</td>
+                                    <td>{{user.email}}</td>
+                                    <td>
+                                        <a href="user_change/{{user.id}}" class="btn ms-3  btn-primary"
+                                            role="button">View<i class="fa-solid ms-1 fa-pen-to-square"></i></a>
+                                    </td>
+                                    <td><button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-whatever="{{user.username}}" id="btn_del"
+                                            data-bs-target="#btn_del_modal">
+                                            Delete<i class="fa-solid ms-1 fa-trash-can"></i>
+                                        </button></td>
+                                </tr>"
+            });
+
+      }
+
+      console.log(data)
+      // dev = data.devicesList;
+
+      // for (i = 0; i < dev.length; i++) {
+      //    output += "<tr><td>" +
+      //       dev[i].device_id + "</td><td>"
+      //       + dev[i].vehicle_no + "</td><td>"
+      //       + dev[i].route_name + "</td><td>"
+      //       + dev[i].temperature + "</td><td>"
+      //       + dev[i].carbon_mono + "</td><td>"
+      //       + dev[i].humidity + "</td><td>"
+      //       + dev[i].light + "</td><td>"
+      //       + dev[i].noise + "</td><td>"
+      //       + dev[i].langitude + "</td><td>"
+      //       + dev[i].latitude + "</td><td><a href='#' class='btn btn-sm ms-3  btn-primary' role='button'>Edit<i class='fa-solid ms-1 fa-pen-to-square'></i></a></td><td><button type='button' class='btn btn-sm btn-danger' data-bs-toggle='modal' data-bs-target='#btn_del_dev_modal' data-bs-whatever=" + dev[i].device_id + "  id='btn_dev_del' >Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
+
+
+      // }
+
+      // $('#table_body').html(output);
+
+   },
+   
+});
+
+});
+});
+
+
+
+
+// PaginationAjax
+
+// $('#dev_page').click(function (e) {
+
+// e.preventDefault();
+// output = "";
+// btn_page = $('#dev_page');
+// page_id = btn_page.getAttribute('data-bs-whatever');
+// let csrf = $("input[name=csrfmiddlewaretoken]").val();
+// console.log(page_id);
+// // href="{%url 'main_admin'%}?page={{devices.num_page}}"
+
+
+
+// var mydata = { 'page_id':page_id,'csrfmiddlewaretoken': csrf };
+// $.ajax({
+//    url: "",
+//    method: "POST",
+//    data: mydata,
+//    success: function (data) {
+
+//       dev = data.devicesList;
+
+//       for (i = 0; i < dev.length; i++) {
+//          output += "<tr><td>" +
+//             dev[i].device_id + "</td><td>"
+//             + dev[i].vehicle_no + "</td><td>"
+//             + dev[i].route_name + "</td><td>"
+//             + dev[i].temperature + "</td><td>"
+//             + dev[i].carbon_mono + "</td><td>"
+//             + dev[i].humidity + "</td><td>"
+//             + dev[i].light + "</td><td>"
+//             + dev[i].noise + "</td><td>"
+//             + dev[i].langitude + "</td><td>"
+//             + dev[i].latitude + "</td><td><a href='#' class='btn btn-sm ms-3  btn-primary' role='button'>Edit<i class='fa-solid ms-1 fa-pen-to-square'></i></a></td><td><button type='button' class='btn btn-sm btn-danger' data-bs-toggle='modal' data-bs-target='#btn_del_dev_modal' data-bs-whatever=" + dev[i].device_id + "  id='btn_dev_del' >Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
+
+
+//       }
+
+//       $('#table_body').html(output);
+
+//    }
+// });
+
+// });
+
 
 
 </script>

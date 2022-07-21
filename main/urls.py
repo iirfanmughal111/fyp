@@ -17,15 +17,17 @@ urlpatterns = [
     path('user_change/<int:user_id>',views.user_change,name='user_change'),
     path('delete_user/<str:user_name>',views.delete_user,name='delete_user'),
     path('add_new_user',views.Add_New_User,name='add_new_user'),
-    path('test',views.test,name='test'),
+    
     path('add_device',views.add_device,name='add_device'),
-    # path('add_device',views.add_device,name='add_device'),
+    path('delete_device',views.delete_device,name='delete_device'),
+    path('loadmore',views.load_more,name='loadmore'),
+
 
 
 
     # path('account/',include('django.contrib.auth.urls')),
     # path('account/change_password',auth_views.PasswordChangeView.as_view()),
-
+    path('test',views.test,name='test'),
 
 
 

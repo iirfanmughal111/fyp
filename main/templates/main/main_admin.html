@@ -17,7 +17,7 @@
     <div class="col-lg-2 sidebar px-4">
         <div class="row my-5 pt-5">
             <div class="col-12">
-                <h3 class="text-white text-center">Vehicle Data <br>Acquisition Sysytem</h3>
+                <h3 class="text-white text-center">Vehicle Data <br>Acquisition System</h3>
             </div>
         </div>
         <div class="row">
@@ -127,7 +127,7 @@
                             <tbody>
 
                                 {% for user in users%}
-                                <tr>
+                                <tr class="usersCount">
                                     <th scope="row">{{user.id}}</th>
                                     <td>{{user.username}}</td>
                                     <td>{{user.first_name}}</td>
@@ -146,7 +146,13 @@
                                 {%endfor%}
 
                             </tbody>
+                            
                         </table>
+                        <div class="row d-flex justify-content-center">
+                                <div class="col-2">
+                                    <a type="button" class="btn btn-dark rounded-pill" id="btn_load_more">Load more</a>
+                                </div>
+                            </div>
                     </div>
                 </div>
 
@@ -257,18 +263,34 @@
                         <button type="button" class="btn my-3 ms-5 btn-primary" id="btn_add_device">
                             Add new <i class="fa-solid fa-plus"></i>
                         </button>
-                        <!-- <button type="button" class="btn my-3 ms-5 btn-primary" data-bs-toggle="modal"
-                             data-bs-target="#btn_add_user">
-                            Add new <i class="fa-solid fa-plus"></i>
-                    </button> -->
 
                     </div>
+
+
+                </div>
+                <div class="row hide" id="dev_success_alert">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Congratulations!</strong> Action performed successfully on device in record.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+
+                    <div class="col-12"><h6  class="hide mt-5 mb-2 alert alert-danger">Alert handle by JS</h6></div>
+                </div>
+                <div class="row hide" id="dev_error_alert">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Erorr!</strong> something went wrong try agian latter..
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+
+                    
                 </div>
                 <!-- AddNewDeviceForm -->
                 <div class="row my-5 border border-3 rounded shadow p-5 hide" id="device_form">
 
                     <div class="col-12">
-                        <h6 id="dev_save_text"></h6>
+
+                        
+
                         <div class="row d-flex justify-content-end">
                             <div class="col-auto"><button class="btn btn-outline-danger btn-close"
                                     id="device_cancel"></button></div>
@@ -276,16 +298,65 @@
                         <form id="dev_form" method="POST">
                             {% csrf_token %}
                             {{deviceForm}}
-                            <button class="btn btn-primary" id="btn_device_save">save device</button>
+                            <button class="btn btn-primary ms-5" id="btn_device_save">Save device</button>
                         </form>
                     </div>
                 </div>
 
 
                 <!-- AllDevicesList -->
-                {{devices_form.as_p}}
+
                 <div class="row my-5">
+                    <!-- <div class="row justify-content-center hide" id="dev_save_text">
+                        <div class="col-10">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Congratulations!</strong> Device Deleted successfully from record.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          </div></div>
+                    </div> -->
                     <div class="col-12">
+                        <div class="row d-flex justify-content-end">
+                            <div class="col-1">
+                                <h6>Page: {{devices.number}}/{{devices.paginator.num_pages}}</h6>
+                            </div>
+                            <div class="col-3">
+
+                                <nav aria-label="Devices Page navigation">
+                                    <ul class="pagination">
+                                        {%if devices.has_previous%}
+                                        <li class="page-item"><a class="page-link"
+                                                href="{%url 'main_admin'%}?page={{devices.previous_page_number}}"><Previous></a>
+                                        </li>
+                                        {%endif%}
+                                        {% for num_page in devices.paginator.page_range %}
+                                        {% if devices.number == num_page %}
+                                        <li class="page-item active">
+                                            <!-- <a class="page-link"
+                                                href="{%url 'main_admin'%}?page={{devices.num_page}}" >{{num_page}}</a> -->
+                                                <a class="page-link"
+                                                data-bs-whatever="{{num_page}}" id="dev_page">{{num_page}}</a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item">
+                                            <!-- <a class="page-link"
+                                                href="{%url 'main_admin'%}?page={{num_page}}">{{num_page}}</a> -->
+                                                <a class="page-link"
+                                                data-bs-whatever="{{num_page}}" id="dev_page">{{num_page}}</a>
+                                        </li>
+                                        {% endif %}
+                                        {% endfor %}
+                                        {%if devices.has_next%}
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                                href="{%url 'main_admin'%}?page={{devices.next_page_number}}">Next</a>
+                                        </li>
+                                        {%endif%}
+                                    </ul>
+                                </nav>
+
+                            </div>
+
+                        </div>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -301,8 +372,6 @@
                                     <th scope="col">lat</th>
                                     <th scope="col">Edit</th>
                                     <th scope="col">Delete</th>
-
-
                                 </tr>
                             </thead>
                             <tbody id="table_body">
@@ -320,12 +389,18 @@
                                     <td>{{device.langitude}}</td>
                                     <td>{{device.latitude}}</td>
                                     <td>
-                                        <a href="#" class="btn btn-sm ms-3  btn-primary" role="button">Edit<i
+                                        <a href="###" class="btn btn-sm ms-3  btn-primary" role="button">Edit<i
                                                 class="fa-solid ms-1 fa-pen-to-square"></i></a>
                                     </td>
-                                    <td><button type="button" class="btn btn-sm btn-danger" id="btn_dev_del">
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                            data-bs-whatever="{{device.device_id}}" id="btn_dev_del"
+                                            data-bs-target="#btn_del_dev_modal">
                                             Delete<i class="fa-solid ms-1 fa-trash-can"></i>
-                                        </button></td>
+                                        </button>
+
+
+                                    </td>
 
 
 
@@ -334,6 +409,40 @@
 
                             </tbody>
                         </table>
+
+                        <!-- Delete Device modal  -->
+
+                        <div class="modal fade" id="btn_del_dev_modal" tabindex="-1" aria-labelledby="deleteDevModal"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteDevModal">Set in JS</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <h4 id="del_dev_id" class="text-danger"></h4>
+                                        <p style="opacity: 0.7;" class="fs-5">Make sure this device will permanently
+                                            deleted. This action can not be undo.</p>
+
+                                    </div>
+                                    <div class="modal-footer">
+
+                                        <a class="btn btn-sm btn-danger" id="del_dev_btn" role="button"
+                                            data-bs-dismiss="modal">Delete<i class="fa-solid ms-1 fa-trash-can"></i></a>
+                                        <button type="button" class="btn btn-sm btn-primary"
+                                            data-bs-dismiss="modal">Cancel</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End Delete Device modal  -->
+
+
+
                     </div>
                 </div>
 
@@ -417,39 +526,33 @@
 
                                     <td>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                                checked>
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                                checked>
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                                checked>
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                                checked>
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                                checked>
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                                checked>
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
                                         </div>
                                     </td>
                                 </tr>
@@ -492,7 +595,7 @@
 
 
 <script>
-    // DeleteUserModal 
+    //  DeleteUserModal 
     var deleteModal = document.getElementById('btn_del_modal')
     deleteModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
@@ -524,7 +627,20 @@
     btn_dev_cancel.addEventListener('click', () => {
         dev_form.classList.add('hide');
     });
-
+        // Device Delete modal
+    // var deleteDevModal = document.getElementById('btn_del_dev_modal')
+    // deleteDevModal.addEventListener('show.bs.modal', function (event) {
+    //     var button = event.relatedTarget;
+    //     var device_del_id = button.getAttribute('data-bs-whatever');
+    //     var modalTitle = deleteDevModal.querySelector('.modal-title');
+    //     var modalBodyText = deleteDevModal.querySelector('.modal-body #del_dev_id');
+    //     modalTitle.textContent = " Delete '" + device_del_id + "' ?";
+    //     modalBodyText.textContent = " Are you sure to delete device with id' " + device_del_id + "' ? ";
+    //     dev_id = document.getElementById('del_dev_btn');
+    //     // var btn_link = "delete_device/" + device_del_id;
+    //     // dev_id.textContent = " Delete ' " + device_del_id + " '";
+    //     // dev_id.setAttribute("href", btn_link);
+    // });
 
 </script>
 {% endblock %}
