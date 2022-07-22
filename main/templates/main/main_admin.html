@@ -77,6 +77,11 @@
 
 
                 </div>
+                <!-- <div class="row">
+                    <div class="col-12 my-5 d-flex justify-content-center">
+                        <iframe width="95%" height="700" id="gmap_canvas" src="https://maps.google.com/maps?q=univeristy%20of%20gujrat%20%20jalal%20pur%20jatta%20road&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                    </div>
+                </div> -->
                 <div class="row d-flex justify-content-center">
                     <div class="col-8">
                         {%load static%}
@@ -96,10 +101,8 @@
                     <div class="col-12 d-flex rounded-pill justify-content-end align-items-end">
                         <a href="export_user_csv" class="btn my-3 ms-5 btn-primary " role="button">Export Users As CSV
                             <i class="fa-solid ms-1 fa-file-export"></i> </a>
-                        <!-- <a href="add_new_user" class="btn my-3 ms-5 btn-primary " role="button">Add new <i
-                                class="fa-solid fa-plus"></i> </a> -->
                         <button type="button" class="btn my-3 ms-5 btn-primary" data-bs-toggle="modal"
-                            data-bs-whatever="{{user.username}}" id="btn_del" data-bs-target="#btn_add_user">
+                            data-bs-whatever="{{user.username}}" data-bs-target="#btn_add_user">
                             Add new user<i class="fa-solid fa-plus"></i>
                         </button>
 
@@ -139,7 +142,7 @@
                                             role="button">View<i class="fa-solid ms-1 fa-pen-to-square"></i></a>
                                     </td>
                                     <td><button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                            data-bs-whatever="{{user.username}}" id="btn_del"
+                                            data-bs-whatever="{{user.username}}" id="btn_del_user"
                                             data-bs-target="#btn_del_modal">
                                             Delete<i class="fa-solid ms-1 fa-trash-can"></i>
                                         </button></td>
@@ -191,11 +194,11 @@
                                         {% endif %}
 
 
-                                        <form method="POST" action="">
-                                            {{form.as_p}}
+                                        <form method="POST" >
+                                            {{UserRegform.as_p}}
                                             {% csrf_token %}
                                             <br>
-                                            <button type="submit" class="btn btn-primary"
+                                            <button type="submit" id="btn_userSave" class=" mb-5 btn btn-primary"
                                                 data-bs-dismiss="modal">Submit</button>
                                         </form>
                                     </div>
@@ -241,7 +244,6 @@
                     </div>
                 </div>
                 <!--End Delete User modal  -->
-                <!-- Nested Horizantol NavTab -->
 
 
 
@@ -432,7 +434,7 @@
                                     <div class="modal-footer">
 
                                         <a class="btn btn-sm btn-danger" id="del_dev_btn" role="button"
-                                            data-bs-dismiss="modal">Delete<i class="fa-solid ms-1 fa-trash-can"></i></a>
+                                            data-bs-dismiss="modal">Delete<i class="fa-solid ms-1 fa-trash-can" ></i></a>
                                         <button type="button" class="btn btn-sm btn-primary"
                                             data-bs-dismiss="modal">Cancel</button>
 
@@ -596,20 +598,20 @@
 
 
 <script>
-    //  DeleteUserModal 
-    var deleteModal = document.getElementById('btn_del_modal')
-    deleteModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var user_name = button.getAttribute('data-bs-whatever');
-        var modalTitle = deleteModal.querySelector('.modal-title');
-        var modalBodyText = deleteModal.querySelector('.modal-body #del_id');
-        modalTitle.textContent = " Delete '" + user_name + "' ?";
-        modalBodyText.textContent = " Are you sure to delete user with username' " + user_name + "' ? ";
-        del_user_id = document.getElementById('del_user_btn');
-        var btn_link = "delete_user/" + user_name;
-        del_user_id.textContent = " Delete ' " + user_name + " '";
-        del_user_id.setAttribute("href", btn_link);
-    });
+    // //  DeleteUserModal 
+    // var deleteModal = document.getElementById('btn_del_modal')
+    // deleteModal.addEventListener('show.bs.modal', function (event) {
+    //     var button = event.relatedTarget;
+    //     var user_name = button.getAttribute('data-bs-whatever');
+    //     var modalTitle = deleteModal.querySelector('.modal-title');
+    //     var modalBodyText = deleteModal.querySelector('.modal-body #del_id');
+    //     modalTitle.textContent = " Delete '" + user_name + "' ?";
+    //     modalBodyText.textContent = " Are you sure to delete user with username' " + user_name + "' ? ";
+    //     del_user_id = document.getElementById('del_user_btn');
+    //     var btn_link = "delete_user/" + user_name;
+    //     del_user_id.textContent = " Delete ' " + user_name + " '";
+    //     del_user_id.setAttribute("href", btn_link);
+    // });
 
     // TicketingTabJs
 

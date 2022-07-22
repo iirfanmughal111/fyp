@@ -1,5 +1,115 @@
 <script>
-   // var dev_save_text = document.getElementById('dev_save_text');
+
+   // AddUserAjaxEffect
+   $(document).ready(function (e) {
+
+$('#btn_userSave').click(function (e) {
+
+e.preventDefault();
+console.log('userAjax');
+output = "";
+$('#dev_save_text').addClass('hide');
+      let username = $('#id_username').val();
+      let email = $('#id_email').val();
+      let first_name = $('#id_first_name').val();
+      let last_name = $('#id_last_name').val();
+      let password1 = $('#id_password1').val();
+      let password2 = $('#id_password2').val();
+      let csrf = $("input[name=csrfmiddlewaretoken]").val();
+
+      var mydata = { 'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name,  'password1': password1, 'password2': password2, 'csrfmiddlewaretoken': csrf };
+      $.ajax({
+         url: "{% url 'add_new_user' %}",
+         method: "POST",
+         data: mydata,
+   //       beforeSend:function(){
+   // $('#btn_load_more').addClass('disabled').text('loading');
+   // },
+         success: function (res) {
+
+            ul = res.usersList;
+
+            for (i = 0; i < ul.length; i++) {
+                  output += "<tr><td>" +
+                  ul[i].id + "</td><td>"
+                  + ul[i].username + "</td><td>"
+                  + ul[i].first_name + "</td><td>"
+                  + ul[i].last_name + "</td><td>"
+                  + ul[i].email + "</td><td>"
+                  + "</td><td><a href='user_change/"+ ul[i].username+"'class='btn btn-sm ms-3  btn-primary' role='button'>View<i class='fa-solid ms-1 fa-pen-to-square'></i></a></td><td><button type='button' class='btn btn-sm btn-danger' data-bs-toggle='modal' data-bs-target='#btn_del_modal' data-bs-whatever=" + ul[i].username + "  id='btn_del' >Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
+
+            }
+
+            $('#user_tbody').html(output);
+
+         }
+      });
+
+   });
+});
+   
+
+
+   //DeleteUserAjax
+//  DeleteUserModal 
+var deleteModal = document.getElementById('btn_del_modal')
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var user_name = button.getAttribute('data-bs-whatever');
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        var modalBodyText = deleteModal.querySelector('.modal-body #del_id');
+        modalTitle.textContent = " Delete '" + user_name + "' ?";
+        modalBodyText.textContent = " Are you sure to delete user with username' " + user_name + "' ? ";
+        del_user_id = document.getElementById('del_user_btn');
+      //   var btn_link = "delete_user/" + user_name;
+      //   del_user_id.textContent = " Delete ' " + user_name + " '";
+      //   del_user_id.setAttribute("href", btn_link);
+    
+      $(document).ready(function (e) {
+
+$('#del_user_btn').click(function (e) {
+
+e.preventDefault();
+console.log('DeleteuserAjax');
+output = "";
+      let del_userBtn = $('#btn_del_user')
+      let username = user_name;
+      console.log(user_name);
+      let csrf = $("input[name=csrfmiddlewaretoken]").val();
+
+      var mydata = { 'username': user_name, 'csrfmiddlewaretoken': csrf };
+      $.ajax({
+         url: "{% url 'delete_user' %}",
+         method: "POST",
+         data: mydata,
+   //       beforeSend:function(){
+   // $('#btn_load_more').addClass('disabled').text('loading');
+   // },
+         success: function (res) {
+            console.log(res)
+            ul = res.usersList;
+
+            for (i = 0; i < ul.length; i++) {
+                  output += "<tr><td>" +
+                  ul[i].id + "</td><td>"
+                  + ul[i].username + "</td><td>"
+                  + ul[i].first_name + "</td><td>"
+                  + ul[i].last_name + "</td><td>"
+                  + ul[i].email + "</td><td>"
+                  + "</td><td><a href='user_change/"+ ul[i].username+"'class='btn btn-sm ms-3  btn-primary' role='button'>View<i class='fa-solid ms-1 fa-pen-to-square'></i></a></td><td><button type='button' class='btn btn-sm btn-danger' data-bs-toggle='modal' data-bs-target='#btn_del_modal' data-bs-whatever=" + ul[i].username + "  id='btn_del_user' >Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
+
+            }
+
+            $('#user_tbody').html(output);
+
+         }
+      });
+
+   });
+});
+});
+
+   // DeviceSaveAjax
    $('#btn_device_save').click(function (e) {
 
       e.preventDefault();
@@ -53,11 +163,6 @@
                   + dev[i].langitude + "</td><td>"
                   + dev[i].latitude + "</td><td><a href='#' class='btn btn-sm ms-3  btn-primary' role='button'>Edit<i class='fa-solid ms-1 fa-pen-to-square'></i></a></td><td><button type='button' class='btn btn-sm btn-danger' data-bs-toggle='modal' data-bs-target='#btn_del_dev_modal' data-bs-whatever=" + dev[i].device_id + "  id='btn_dev_del' >Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
 
-               // <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-               //                           data-bs-whatever="{{device.device_id}}" id="btn_dev_del"
-               //                           data-bs-target="#btn_del_dev_modal">
-               //                           Delete<i class="fa-solid ms-1 fa-trash-can"></i>
-               //                       </button>
 
             }
 
@@ -129,7 +234,7 @@
 
    });//modal func END
 
-   //Load More
+   //Load More Users
    $(document).ready(function (e) {
 
 $('#btn_load_more').click(function (e) {
@@ -142,7 +247,7 @@ var offset = $('.usersCount').length;
 var ser=undefined;
 var mydata = { 'offset':offset,'csrfmiddlewaretoken': csrf };
 $.ajax({
-   url: "{% url 'loadmore' %}",
+   url: "{% url 'loadmoreUser' %}",
    method: "POST",
    data: mydata,
    dataType:'json',
@@ -163,7 +268,7 @@ $.ajax({
                ser++;
 
 
-               output += "<tr class='usersCount'><th scope='row'>"+ser+"</th><td>"+data.fields.username+"</td><td>"+data.fields.first_name+"</td><td>"+data.fields.last_name+"</td><td>"+data.fields.email+"</td><td><a href='user_change/"+data.fields.username+"'type='button' class='btn ms-3  btn-primary'>View<i class='fa-solid ms-1 fa-pen-to-square'></i></a> </td><td><button type='button' class='btn btn-danger' data-bs-toggle='modal'data-bs-whatever="+data.fields.username+" id='btn_del' data-bs-target='#btn_del_modal'>Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
+               output += "<tr class='usersCount'><th scope='row'>"+ser+"</th><td>"+data.fields.username+"</td><td>"+data.fields.first_name+"</td><td>"+data.fields.last_name+"</td><td>"+data.fields.email+"</td><td><a href='user_change/"+data.fields.username+"'type='button' class='btn ms-3  btn-primary'>View<i class='fa-solid ms-1 fa-pen-to-square'></i></a> </td><td><button type='button' class='btn btn-danger' data-bs-toggle='modal'data-bs-whatever="+data.fields.username+" id='btn_del_user' data-bs-target='#btn_del_modal'>Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
                console.log(data.fields.id);
                
             });
@@ -200,52 +305,6 @@ $.ajax({
 
 
 
-
-// PaginationAjax
-
-// $('#dev_page').click(function (e) {
-
-// e.preventDefault();
-// output = "";
-// btn_page = $('#dev_page');
-// page_id = btn_page.getAttribute('data-bs-whatever');
-// let csrf = $("input[name=csrfmiddlewaretoken]").val();
-// console.log(page_id);
-// // href="{%url 'main_admin'%}?page={{devices.num_page}}"
-
-
-
-// var mydata = { 'page_id':page_id,'csrfmiddlewaretoken': csrf };
-// $.ajax({
-//    url: "",
-//    method: "POST",
-//    data: mydata,
-//    success: function (data) {
-
-//       dev = data.devicesList;
-
-//       for (i = 0; i < dev.length; i++) {
-//          output += "<tr><td>" +
-//             dev[i].device_id + "</td><td>"
-//             + dev[i].vehicle_no + "</td><td>"
-//             + dev[i].route_name + "</td><td>"
-//             + dev[i].temperature + "</td><td>"
-//             + dev[i].carbon_mono + "</td><td>"
-//             + dev[i].humidity + "</td><td>"
-//             + dev[i].light + "</td><td>"
-//             + dev[i].noise + "</td><td>"
-//             + dev[i].langitude + "</td><td>"
-//             + dev[i].latitude + "</td><td><a href='#' class='btn btn-sm ms-3  btn-primary' role='button'>Edit<i class='fa-solid ms-1 fa-pen-to-square'></i></a></td><td><button type='button' class='btn btn-sm btn-danger' data-bs-toggle='modal' data-bs-target='#btn_del_dev_modal' data-bs-whatever=" + dev[i].device_id + "  id='btn_dev_del' >Delete<i class='fa-solid ms-1 fa-trash-can'></i></button></td></tr>";
-
-
-//       }
-
-//       $('#table_body').html(output);
-
-//    }
-// });
-
-// });
 
 
 

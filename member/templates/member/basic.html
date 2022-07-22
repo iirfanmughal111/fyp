@@ -20,6 +20,7 @@
   {% load static %}
 
   <link rel="stylesheet" type="text/css" href="{% static 'member/css/style.css' %}">
+
   <!-- {% load static %}
   <link rel="stylesheet" type="text/csss" href="{% static 'member/css/style.css' %}"> -->
 
@@ -27,7 +28,7 @@
 
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #e3f2fd;" id="#nav_bar">
     <div class="container-fluid">
       <!-- <a class="navbar-brand" href="http://127.0.0.1:8000">
           <img src="https://hackster.imgix.net/uploads/attachments/1080766/_TMfsEakDx6.blob?auto=compress%2Cformat&w=900&h=675&fit=min" id="logo" alt="">
@@ -42,7 +43,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/member">Home</a>
+            <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/contact_us">Contact Us</a>
@@ -98,8 +99,11 @@
       </div>
     </div>
   </nav>
-  {% block fluid%}
+  <div class="conatiner-fluid">
+      {% block fluid%}
   {%endblock%}
+  </div>
+
   <div class="container">
     {%block body %}
     

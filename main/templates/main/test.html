@@ -13,9 +13,24 @@
   </head>
   <body>
     <h1>Device form</h1>
+    <div class="row ">
+      <div class="col-6">test</div>
+      <div class="col-6">
+          <div class="row d-flex justify-content-end">
+              <div class="col-8">
+                  <video width="520" height="440" loop autoplay>
+                      <source src="{% static 'main/images/header_video2.mp4' %}" class="img-fluid" type="video/mp4">
+                      <!-- <source src="movie.ogg" type="video/ogg"> -->
+                      Your browser does not support the video tag.
+                  </video>
+              </div>
+          </div>
+  
+      </div>
+  </div>
     <form action="">
       {%csrf_token%}
-        {{deviceForm.as_p}}
+      {{deviceForm.as_p}}
         
         <button class="btn btn-primary" id="btn_device_save2"> submit</button>
     </form>

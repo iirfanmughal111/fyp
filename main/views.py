@@ -1,7 +1,4 @@
 from distutils.command.build_scripts import first_line_re
-import imp
-import json
-from cupshelpers import Printer
 from django.shortcuts import redirect, render
 from requests import request
 from django.shortcuts import render,redirect
@@ -29,16 +26,12 @@ from django.core import serializers
 
 
 # Create your views here.
-def contact_us(request):
-    #   if request.method =='POST':
-    #     djname = request.POST.get('name','')
-    #     djemail = request.POST.get('email','')
-    #     djphone = request.POST.get('phone','')
-    #     djdesc = request.POST.get('desc','')
-        # contact = contact_us_db(name=djname,email= djemail, phone= djphone, desc = djdesc)
-        # contact.save()
 
-    return render (request,'main/contact_us.html',{})
+def index(request):
+
+    return render (request,'main/index.html')
+
+
     
 
 @login_required
@@ -50,21 +43,25 @@ def main_admin(request):
         users = Paginator(rev_users,15)
         page_list = request.GET.get('page')
         users=users.get_page(page_list)
+        # users = User.objects.all().order_by('-id')[:15]
+        print(users)
         totalUser = User.objects.all().count()
         # Adding new Users 
-        if request.method!='POST':
-            form = RegisterUserForm()   
-        else:
-            form = RegisterUserForm(request.POST)
-            if form.is_valid():
-                form.save()
-                djusername = form.cleaned_data['username']
-                djpassword = form.cleaned_data['password1']
-                djemail = form.cleaned_data['email']
-                djf_name = form.cleaned_data['first_name']
-                djl_name = form.cleaned_data['last_name']
+        # if request.method!='POST':
+        #     form = RegisterUserForm()   
+        # else:
+        #     form = RegisterUserForm(request.POST)
+        #     if form.is_valid():
+        #         form.save()
+        #         djusername = form.cleaned_data['username']
+        #         djpassword = form.cleaned_data['password1']
+        #         djemail = form.cleaned_data['email']
+        #         djf_name = form.cleaned_data['first_name']
+        #         djl_name = form.cleaned_data['last_name']
                 
-                user = authenticate(username = djusername, password = djpassword, email = djemail, first_name = djf_name, last_name = djl_name )
+        #         user = authenticate(username = djusername, password = djpassword, email = djemail, first_name = djf_name, last_name = djl_name )
+            #UserRegistrationForm
+        UserRegform = RegisterUserForm()
             # Device Form
         dev_form = DevicesForm()
 
@@ -82,38 +79,67 @@ def main_admin(request):
     
             
            
-        context = {'users':users,'form':form,'devices':device_page, 'deviceForm':dev_form,'totalUser':totalUser,'totaldevices':totaldevices}
+        context = {'users':users,'UserRegform':UserRegform,'devices':device_page, 'deviceForm':dev_form,'totalUser':totalUser,'totaldevices':totaldevices}
         # context = {'users':users,'form':form,'devices':alldevices, }
 
         return render (request,'main/main_admin.html',context)
     else:
         return render (request,'member/index.html')
-def test(request):
-    if request.method!='POST':
-        dev_form = DevicesForm(use_required_attribute=False)   
-    else:
-            dev_form = DevicesForm(request.POST,use_required_attribute=False)
-        # if dev_form.is_valid():
-            
-        #     # vehicle_no route_name  temperature carbon_mono  humidity light noise  langitude latitude
-        #     dj_v_no = dev_form.cleaned_data['vehicle_no']
-        #     dj_r_name = dev_form.cleaned_data['route_name']
-        #     dj_temp = dev_form.cleaned_data['temperature']
-        #     dj_co = dev_form.cleaned_data['carbon_mono']
-        #     dj_hum = dev_form.cleaned_data['humidity']
-        #     dj_light = dev_form.cleaned_data['light']
-        #     dj_noise = dev_form.cleaned_data['noise']
-        #     dj_long = dev_form.cleaned_data['latitude']
-        #     dj_lat = dev_form.cleaned_data['latitude']
 
-        #     dev = devices(vehicle_no=dj_v_no, route_name = dj_r_name,  temperature= dj_temp, carbon_mono = dj_co,  humidity = dj_hum, light = dj_light,  noise = dj_noise, langitude = dj_long, latitude = dj_lat)
-        #     dev.save()
-            
-       
+def Add_New_User(request):
+    if request.method=='POST':
+            form = RegisterUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                djusername = form.cleaned_data['username']
+                djemail = form.cleaned_data['email']
+                djf_name = form.cleaned_data['first_name']
+                djl_name = form.cleaned_data['last_name']
+                djpassword = form.cleaned_data['password1']
+                djpassword2 = form.cleaned_data['password2']      
+                user = authenticate(username = djusername, password = djpassword, email = djemail, first_name = djf_name, last_name = djl_name,password2=djpassword2 )
+                user.save()
+                #alldevices = devices.objects.values()
+                #devicesList = list(alldevices)
+                users = User.objects.values().order_by('-id')[:15]
+                userList15 = list(users)
+            # user = authenticate(username= djusername,password=djpassword)
+            # login(request,user)
+            # messages.success(request, 'Successfully registered and loged in')
+            return JsonResponse({'status':1,'usersList':userList15})
+
+    else:
+          return JsonResponse({'status':0})
+
+def delete_user(request):
+    if request.method=='POST':
+        user = request.POST['username']
+        del_user  = User.objects.get(username=user)
+        users = User.objects.values().order_by('-id')[:15]
+        userList15 = list(users)
     
+        del_user.delete()
+        return JsonResponse({'status':1,'usersList':userList15})
+
+    else:
+          return JsonResponse({'status':0})
+  
+
+def contact_us(request):
+    #   if request.method =='POST':
+    #     djname = request.POST.get('name','')
+    #     djemail = request.POST.get('email','')
+    #     djphone = request.POST.get('phone','')
+    #     djdesc = request.POST.get('desc','')
+        # contact = contact_us_db(name=djname,email= djemail, phone= djphone, desc = djdesc)
+        # contact.save()
+
+    return render (request,'main/contact_us.html',{})
+def test(request):
+
             
         
-    context = {'deviceForm':dev_form}
+    context = {'deviceForm'}
     # context = {'users':users,'form':form,'devices':alldevices, }
 
     return render (request,'main/test.html',context)
@@ -153,23 +179,21 @@ def delete_device(request):
         return JsonResponse({'status':1,'devicesList':devicesList})
     else:
         return JsonResponse({'status':0})
-
-    # return redirect('main_admin')
    
-def load_more(request):
+def load_more_Users(request):
     if request.method=='POST':
-        AllUser = get_user_model()
-        # users = User.objects.all()
         offset = int(request.POST['offset'])
         limit = 10
         serial  = offset+limit
-        total_users= AllUser.objects.all().count()
+        total_users = User.objects.all().count()
+        print(total_users)
         if offset>=total_users:
             return JsonResponse({'status':0,})
         else:
-            allusers = User.objects.all()[offset:offset+limit]         
+            allusers = User.objects.all().order_by('-id')[offset:offset+limit]         
             userList = serializers.serialize('json',allusers)
-        return JsonResponse({'usersList':userList,'total_rows':total_users,'serial':serial})
+      
+        return JsonResponse({'usersList':userList,'serial':serial})
 
 
 def user_change(request,user_name):
@@ -245,30 +269,7 @@ def export_user_csv(request):
     response['Content-disposition'] = 'attachment; filename = "user.csv"'    
     return response
 
-def delete_user(request,user_name):
-    User  = get_user_model().objects.get(username=user_name)
-    User.delete()
-    # return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
-    return redirect('main_admin')
 
-def Add_New_User(request):
-    if request.method=='POST':
-        form = RegisterUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            djusername = form.cleaned_data['username']
-            djpassword = form.cleaned_data['password1']
-            djemail = form.cleaned_data['email']
-            djf_name = form.cleaned_data['first_name']
-            djl_name = form.cleaned_data['last_name']
 
-            user = authenticate(username = djusername, password= djpassword, email = djemail, first_name = djf_name, last_name = djl_name )
-            # user = authenticate(username= djusername,password=djpassword)
-            # login(request,user)
-            messages.success(request, 'Successfully registered and loged in')
-            return redirect('add_new_user')
 
-    else:
-        form = RegisterUserForm()        
-    return render (request,'main/add_new_user.html' ,{'form':form})   
     

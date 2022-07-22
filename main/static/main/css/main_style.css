@@ -35,3 +35,13 @@
     font-weight: bold; 
     
 }
+.body{
+    background-color: blue;
+}
+.video_fade{
+    background-color: red;
+    opacity: 0.5 !important;
+
+
+
+}
